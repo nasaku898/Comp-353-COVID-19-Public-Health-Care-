@@ -5,7 +5,6 @@ $dbUsername = "aec353_4";
 $dbPassword = "badobrat";
 $dbName = "aec353_4";
 
-
 // $dbServerName = "localhost";
 // $dbUsername = "root";
 // $dbPassword = "";
@@ -18,5 +17,3 @@ if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 }
 echo "Connected successfully";
-
-?>
