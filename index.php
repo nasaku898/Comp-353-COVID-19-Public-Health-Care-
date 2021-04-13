@@ -14,7 +14,9 @@
     <div class="button">
         <button type="button" class="specificButton">Patient</button>
         <button type="button" class="specificButton">Worker</button>
-        <button type="button" class="specificButton">Admin</button>
+        <a href="https://aec353.encs.concordia.ca/admin-login.php">
+            <button type="button" class="specificButton">Admin</button>
+        </a>
     </div>
 </body>
 
