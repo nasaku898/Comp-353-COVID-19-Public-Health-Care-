@@ -7,23 +7,28 @@ session_start();
 
 // Define variables and initialize with empty values
 $startDate = $endDate = "";
-$startDate_err = $endDate_err = $empty_err = "";
+$startDate_err = $endDate_err = "";
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if startDate is empty
     if (empty(trim($_POST["from"]))) {
-        $startDate_err = "Please enter from date.";
+        $startDate_err = "Please enter 'From' date.";
     } else {
         $startDate = trim($_POST["from"]);
     }
 
     // Check if endDate is empty
     if (empty(trim($_POST["to"]))) {
-        $endDate_err = "Please enter to date.";
+        $endDate_err = "Please enter 'To' date.";
     } else {
         $endDate = trim($_POST["to"]);
+    }
+
+    if (!empty($startDate_err) || !empty($endDate_err)) {
+        $statement = $conn->prepare("SELECT * FROM message m");
+        $statement->execute();
     }
 
     // Validate
@@ -51,6 +56,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <h1 class="title">Messages</h1>
+    <?php
+    if (!empty($startDate_err)) {
+        echo '<div class="alert">' . $startDate_err . '</div>';
+    } else if (!empty($endDate_err)) {
+        echo '<div class="alert">' . $endDate_err . '</div>';
+    }
+    ?>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <label for="from">From:</label>
         <input type="date" id="from" name="from" /> <br /><br />
@@ -59,30 +71,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" value="Search" />
     </form>
 
-    <table>
+    <table id="messages">
         <thead>
             <tr>
-                <td>
+                <th>
                     Message Id
-                </td>
-                <td>
+                </th>
+                <th>
                     Description
-                </td>
-                <td>
+                </th>
+                <th>
                     Alert Level
-                </td>
-                <td>
+                </th>
+                <th>
                     Date
-                </td>
-                <td>
+                </th>
+                <th>
                     Old Alert State
-                </td>
-                <td>
+                </th>
+                <th>
                     New Alert State
-                </td>
-                <td>
+                </th>
+                <th>
                     Message Type
-                </td>
+                </th>
             </tr>
         </thead>
         <tbody>
