@@ -65,11 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h1 class="title">Admin Login</h1>
     <?php
     if (!empty($login_err)) {
-        echo '<div class="alert alert-danger">' . $login_err . '</div>';
+        echo '<div class="alert">' . $login_err . '</div>';
     } else if (!empty($username_err)) {
-        echo '<div class="alert alert-danger">' . $username_err . '</div>';
+        echo '<div class="alert">' . $username_err . '</div>';
     } else if (!empty($password_err)) {
-        echo '<div class="alert alert-danger">' . $password_err . '</div>';
+        echo '<div class="alert">' . $password_err . '</div>';
     }
     ?>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
