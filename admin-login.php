@@ -75,11 +75,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="usernameDiv">
             <label for="username">Username:</label>
-            <input type="text" name="username" /> <br /><br />
+            <input type="text" id="username" name="username" /> <br /><br />
         </div>
         <div class="passwordDiv">
             <label for="password">Password:</label>
-            <input type="password" name="password" /><br /><br />
+            <input type="password" id="password" name="password" /><br /><br />
         </div>
         <input type="submit" value="Login" />
     </form>
