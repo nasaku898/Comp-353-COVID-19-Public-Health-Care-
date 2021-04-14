@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($createParentOf->execute()) {
             unset($_POST);
             ob_start();
-            header("location: https://aec353.encs.concordia.ca/admin-home.php");
+            header("location: https://aec353.encs.concordia.ca/patient-home.php");
             ob_end_flush();
             die();
         }
