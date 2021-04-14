@@ -77,15 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $createWorksAt->bindParam(":medicareNumber", $medicareNumber);
         $createWorksAt->bindParam(":centerName", $workplace);
 
-        // $statement->execute();
-        // $createAddress->execute();
-        // $createPostalArea->execute();
-        // $createLivesAt->execute();
-        // $createSituatedIn->execute();
-        // $createInside->execute();
-        // $createHealthWorker->execute();
-        // $createWorksAt->execute();
-
         if ($statement->execute() &&  $createAddress->execute() && $createPostalArea->execute()) {
             if ($createLivesAt->execute() && $createSituatedIn->execute() && $createInside->execute() && $createHealthWorker->execute() && $createWorksAt->execute()) {
                 unset($_POST);
