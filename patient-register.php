@@ -38,12 +38,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statement->bindParam(":gender", $gender);
         $statement->bindParam(":email", $email);
 
-        $createAddress = $conn->prepare("INSERT INTO address(city,streetName,civicNumber) VALUES(:city, :streetName,:civicNumber);");
+        $createAddress = $conn->prepare("INSERT IGNORE INTO  address(city,streetName,civicNumber) VALUES(:city, :streetName,:civicNumber);");
         $createAddress->bindParam(":city", $city);
         $createAddress->bindParam(":streetName", $streetName);
         $createAddress->bindParam(":civicNumber", $civicNumber);
 
-        $createPostalArea = $conn->prepare("INSERT INTO postalArea(postalCode, province) VALUES(:postalCode,:province)");
+        $createPostalArea = $conn->prepare("INSERT IGNORE INTO  postalArea(postalCode, province) VALUES(:postalCode,:province)");
         $createPostalArea->bindParam(":postalCode", $postalCode);
         $createPostalArea->bindParam(":province", $province);
 
@@ -53,13 +53,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $createLivesAt->bindParam(":civicNumber", $civicNumber);
         $createLivesAt->bindParam(":city", $city);
 
-        $createSituatedIn = $conn->prepare("INSERT INTO situatedIn(regionId,streetName, civicNumber,city) VALUES(:regionId,:streetName,:civicNumber,:city)");
+        $createSituatedIn = $conn->prepare("INSERT IGNORE INTO  situatedIn(regionId,streetName, civicNumber,city) VALUES(:regionId,:streetName,:civicNumber,:city)");
         $createSituatedIn->bindParam(":regionId", $region);
         $createSituatedIn->bindParam(":streetName", $streetName);
         $createSituatedIn->bindParam(":civicNumber", $civicNumber);
         $createSituatedIn->bindParam(":city", $city);
 
-        $createInside = $conn->prepare("INSERT INTO inside(postalCode,streetName, civicNumber,city) VALUES(:postalCode, :streetName,:civicNumber,:city)");
+        $createInside = $conn->prepare("INSERT IGNORE INTO  inside(postalCode,streetName, civicNumber,city) VALUES(:postalCode, :streetName,:civicNumber,:city)");
         $createInside->bindParam(":postalCode", $postalCode);
         $createInside->bindParam(":streetName", $streetName);
         $createInside->bindParam(":civicNumber", $civicNumber);

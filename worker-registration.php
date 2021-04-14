@@ -4,6 +4,9 @@ require_once 'db/db_connection.php';
 $statement = $conn->prepare('SELECT distinct name, regionId FROM region');
 $statement->execute();
 
+$centerName = $conn->prepare('SELECT distinct centerName FROM publicHealthCenter');
+$centerName->execute();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //Personal information
@@ -24,7 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $province = $_POST["province"];
     $region = $_POST["region"];
 
-    if (empty(trim($firstName)) || empty(trim($lastName)) || empty(trim($medicareNumber)) || empty(trim($telephoneNumber)) || empty(trim($dateOfBirth)) || empty(trim($citizenship)) || empty(trim($email)) || empty(trim($gender)) || empty(trim($civicNumber)) || empty(trim($streetName)) || empty(trim($city)) || empty(trim($postalCode)) || empty(trim($province))) {
+    $workplace = $_POST["workplace"];
+
+    if (empty(trim($firstName)) || empty(trim($lastName)) || empty(trim($medicareNumber)) || empty(trim($telephoneNumber)) || empty(trim($dateOfBirth)) || empty(trim($citizenship)) || empty(trim($email)) || empty(trim($gender)) || empty(trim($civicNumber)) || empty(trim($streetName)) || empty(trim($city)) || empty(trim($postalCode)) || empty(trim($province)) || empty(trim($workplace))) {
         $error = "error";
         echo $error;
     } else {
@@ -38,12 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statement->bindParam(":gender", $gender);
         $statement->bindParam(":email", $email);
 
-        $createAddress = $conn->prepare("INSERT INTO address(city,streetName,civicNumber) VALUES(:city, :streetName,:civicNumber);");
+        $createAddress = $conn->prepare("INSERT IGNORE INTO  address(city,streetName,civicNumber) VALUES(:city, :streetName,:civicNumber);");
         $createAddress->bindParam(":city", $city);
         $createAddress->bindParam(":streetName", $streetName);
         $createAddress->bindParam(":civicNumber", $civicNumber);
 
-        $createPostalArea = $conn->prepare("INSERT INTO postalArea(postalCode, province) VALUES(:postalCode,:province)");
+        $createPostalArea = $conn->prepare("INSERT IGNORE INTO  postalArea(postalCode, province) VALUES(:postalCode,:province)");
         $createPostalArea->bindParam(":postalCode", $postalCode);
         $createPostalArea->bindParam(":province", $province);
 
@@ -53,20 +58,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $createLivesAt->bindParam(":civicNumber", $civicNumber);
         $createLivesAt->bindParam(":city", $city);
 
-        $createSituatedIn = $conn->prepare("INSERT INTO situatedIn(regionId,streetName, civicNumber,city) VALUES(:regionId,:streetName,:civicNumber,:city)");
+        $createSituatedIn = $conn->prepare("INSERT IGNORE INTO  situatedIn(regionId,streetName, civicNumber,city) VALUES(:regionId,:streetName,:civicNumber,:city)");
         $createSituatedIn->bindParam(":regionId", $region);
         $createSituatedIn->bindParam(":streetName", $streetName);
         $createSituatedIn->bindParam(":civicNumber", $civicNumber);
         $createSituatedIn->bindParam(":city", $city);
 
-        $createInside = $conn->prepare("INSERT INTO inside(postalCode,streetName, civicNumber,city) VALUES(:postalCode, :streetName,:civicNumber,:city)");
+        $createInside = $conn->prepare("INSERT IGNORE INTO  inside(postalCode,streetName, civicNumber,city) VALUES(:postalCode, :streetName,:civicNumber,:city)");
         $createInside->bindParam(":postalCode", $postalCode);
         $createInside->bindParam(":streetName", $streetName);
         $createInside->bindParam(":civicNumber", $civicNumber);
         $createInside->bindParam(":city", $city);
 
-        if ($statement->execute() && $createAddress->execute() && $createPostalArea->execute()) {
-            if ($createLivesAt->execute() && $createSituatedIn->execute() && $createInside->execute()) {
+        $createHealthWorker = $conn->prepare("INSERT INTO publicHealthWorker(medicareNumber) VALUES(:medicareNumber)");
+        $createHealthWorker->bindParam(":medicareNumber", $medicareNumber);
+
+        $createWorksAt = $conn->prepare("INSERT INTO worksAt(medicareNumber,centerName) VALUES(:medicareNumber, :centerName)");
+        $createWorksAt->bindParam(":medicareNumber", $medicareNumber);
+        $createWorksAt->bindParam(":centerName", $workplace);
+
+        // $statement->execute();
+        // $createAddress->execute();
+        // $createPostalArea->execute();
+        // $createLivesAt->execute();
+        // $createSituatedIn->execute();
+        // $createInside->execute();
+        // $createHealthWorker->execute();
+        // $createWorksAt->execute();
+
+        if ($statement->execute() &&  $createAddress->execute() && $createPostalArea->execute()) {
+            if ($createLivesAt->execute() && $createSituatedIn->execute() && $createInside->execute() && $createHealthWorker->execute() && $createWorksAt->execute()) {
                 unset($_POST);
                 ob_start();
                 header("location: https://aec353.encs.concordia.ca/admin-home.php");
@@ -75,6 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
+    unset($_POST);
 }
 ?>
 
@@ -140,6 +162,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="<?= $row["regionId"] ?>"> <?= $row["name"] ?> </option>
             <?php } ?>
         </select>
+
+        <h3>Health Workplace</h3>
+        <label>Select your work location</label>
+        <select name="workplace" id="workplace">
+            <?php while ($row = $centerName->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
+                <option value="<?= $row["centerName"] ?>"> <?= $row["centerName"] ?> </option>
+            <?php } ?>
+        </select>
+        <br />
         <input type="submit" value="Create" />
     </form>
 </body>
