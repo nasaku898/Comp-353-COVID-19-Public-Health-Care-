@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dateOfBirth = $_POST["dateOfBirth"];
 
     if (empty(trim($medicareNumber)) || empty(trim($dateOfBirth))) {
-        echo '<p>Please fill the for completely</p>';
+        echo '<p>Please fill the form completely</p>';
     } else {
         $statement = $conn->prepare('SELECT medicareNumber, dateOfBirth from person where person.medicareNumber = :medicareNumber and person.dateOfBirth = :dateOfBirth');
         $statement->bindParam(":medicareNumber", $medicareNumber);
