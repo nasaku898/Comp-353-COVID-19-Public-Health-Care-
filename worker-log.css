@@ -1,0 +1,20 @@
+#form {
+    display: flex;
+    vertical-align: middle;
+}
+#input_box{
+    height: 20px;
+    display: block;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+}
+
+#check {
+    height: 20px;
+    display: block;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    margin-right:30px;
+}
