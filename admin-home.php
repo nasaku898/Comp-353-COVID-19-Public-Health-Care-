@@ -10,6 +10,19 @@
 
 <body>
     <h1 class="title">Home</h1>
+    <a>Manage Patients</a> <br /><br />
+    <a>Manage Workers</a> <br /><br />
+    <a>Manage Facilities</a> <br /><br />
+    <a>Manage Region</a> <br /><br />
+    <a>Manage Group Zone</a> <br /><br />
+    <a>Manage Health Recommendation</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/admin-message.php">Display All Messages</a> <br /><br />
+    <a>Search Patients</a> <br /><br />
+    <a>Search Workers</a> <br /><br />
+    <a>Facilities List</a> <br /><br />
+    <a>Regions List</a> <br /><br />
+    <a>Region Report</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/logout.php">Logout</a> <br /><br />
 </body>
 
 </html>

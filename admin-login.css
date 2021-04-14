@@ -12,3 +12,12 @@ body{
 .usernameDiv, .passwordDiv{
     flex-direction: row;
 }
+
+.alert{
+    color:red;
+    margin-bottom: 10px;
+}
+
+.title{
+    margin-bottom: 10px;
+}

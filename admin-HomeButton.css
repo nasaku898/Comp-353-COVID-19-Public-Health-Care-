@@ -1,0 +1,9 @@
+.homeButtonDiv{
+    position: absolute;
+    top: 22px;
+    right: 16px;
+}
+
+#homeButton{
+    font-size: large;
+}
