@@ -18,13 +18,13 @@ $statement->execute();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="admin-regions.css">
+    <link rel="stylesheet" href="admin-table.css">
     <title>Admin Regions List</title>
 </head>
 
 <body>
     <h1 class="title">Regions List</h1>
-    <table id="regions">
+    <table id="admin-table">
         <thead>
             <tr>
                 <th>
