@@ -16,7 +16,7 @@
     <a>Manage Region</a> <br /><br />
     <a>Manage Group Zone</a> <br /><br />
     <a>Manage Health Recommendation</a> <br /><br />
-    <a>Display All Messages</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/admin-message.php">Display All Messages</a> <br /><br />
     <a>Search Patients</a> <br /><br />
     <a>Search Workers</a> <br /><br />
     <a>Facilities List</a> <br /><br />

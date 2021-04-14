@@ -1,0 +1,16 @@
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+    padding-top: 15%;
+    background-color: lightgray;
+}
+
+.usernameDiv, .passwordDiv{
+    flex-direction: row;
+}
+
+.error {color: #FF0000;}
