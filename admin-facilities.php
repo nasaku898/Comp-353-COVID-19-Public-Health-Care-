@@ -19,13 +19,13 @@ $statement->execute();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="admin-facilities.css">
+    <link rel="stylesheet" href="admin-table.css">
     <title>Admin Facilities List</title>
 </head>
 
 <body>
     <h1 class="title">Facilities List</h1>
-    <table id="facilities">
+    <table id="admin-table">
         <thead>
             <tr>
                 <th>
