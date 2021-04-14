@@ -80,13 +80,23 @@ if (isset($_POST["result"]) && isset($_POST["datePerform"]) && isset($_POST["wor
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
+    $test = $conn->prepare("INSERT INTO test (testId) VALUES (NULL);");
+    $test->execute();
+    $last_id_test = $conn->lastInsertId();
 
-    $test = $conn->prepare("INSERT INTO receive(diagnosticId, medicareNumber, centerName) VALUES (:diagnosticId, :medicareNumber, :centerName);");
-    $test->bindParam(':diagnosticId', $last_id);
-    $test->bindParam(':medicareNumber', $_POST["patientMedicareNumber"]);
-    $test->bindParam(':centerName', $_POST["center"]);
+    $tested = $conn->prepare("INSERT INTO tested (testId,medicareNumberPerson,medicareNumberWorker) VALUES (:testId, :medicareNumberPerson, :medicareNumberWorker);");
+    $tested->bindParam(':testId', $last_id_test);
+    $tested->bindParam(':medicareNumberPerson', $_POST["patientMedicareNumber"]);
+    $tested->bindParam(':medicareNumberWorker', $_POST["workerMedicareNumber"]);
+    $tested->execute();
 
-    if($test->execute()){
+
+    $receive = $conn->prepare("INSERT INTO receive(diagnosticId, medicareNumber, centerName) VALUES (:diagnosticId, :medicareNumber, :centerName);");
+    $receive->bindParam(':diagnosticId', $last_id);
+    $receive->bindParam(':medicareNumber', $_POST["patientMedicareNumber"]);
+    $receive->bindParam(':centerName', $_POST["center"]);
+
+    if($receive->execute()){
         unset($_POST, $last_id);
         ob_start();
         header("location: https://aec353.encs.concordia.ca/admin-home.php");
