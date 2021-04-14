@@ -135,7 +135,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="province">Province</label>
         <input type="text" id="province" name="province">
         <br />
-        <label for="region">Region</label>
         <select name="region" id="region">
             <?php while ($row = $statement->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
                 <option value="<?= $row["regionId"] ?>"> <?= $row["name"] ?> </option>
