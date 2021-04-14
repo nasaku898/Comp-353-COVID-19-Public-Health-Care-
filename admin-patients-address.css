@@ -1,0 +1,36 @@
+body{
+    background-color: lightgray;
+}
+
+.alert{
+    color:red;
+    margin-bottom: 10px;
+}
+
+#patients-address {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 30px;
+}
+
+#patients-address td, #patients-address th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#patients-address tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+#patients-address tr:hover {
+    background-color: #ddd;
+}
+
+#patients-address th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
