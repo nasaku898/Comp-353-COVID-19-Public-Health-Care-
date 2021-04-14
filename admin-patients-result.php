@@ -27,7 +27,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!empty($startDate_err) || !empty($endDate_err)) {
-        $statement = $conn->prepare("SELECT * FROM message m");
+        $statement = $conn->prepare("SELECT p.firstName, p.lastName, p.dateOfBirth, p.telephoneNumber, p.emailAddress, d.result
+        FROM diagnostic d, person p, receive r
+        WHERE p.medicareNumber = r.medicareNumber AND r.diagnosticId = d.diagnosticId
+        ORDER BY d.result;");
         $statement->execute();
     }
 
@@ -36,17 +39,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if start date greater than end date
         if ($startDate > $endDate) {
             $endDate_err = "Invalid date. 'From' date greater than 'To' date.";
-            $statement = $conn->prepare("SELECT * FROM message m");
+            $statement = $conn->prepare("SELECT p.firstName, p.lastName, p.dateOfBirth, p.telephoneNumber, p.emailAddress, d.result
+            FROM diagnostic d, person p, receive r
+            WHERE p.medicareNumber = r.medicareNumber AND r.diagnosticId = d.diagnosticId
+            ORDER BY d.result;");
             $statement->execute();
         } else {
-            $statement = $conn->prepare("SELECT * FROM message m WHERE m.date>=:startDate AND m.date<=:endDate");
+            $statement = $conn->prepare("SELECT p.firstName, p.lastName, p.dateOfBirth, p.telephoneNumber, p.emailAddress, d.result
+            FROM diagnostic d, person p, receive r
+            WHERE p.medicareNumber = r.medicareNumber AND r.diagnosticId = d.diagnosticId AND d.resultDate >=:startDate AND d.resultDate <=:endDate
+            ORDER BY d.result;");
             $statement->bindParam(":startDate", $startDate);
             $statement->bindParam(":endDate", $endDate);
             $statement->execute();
         }
     }
 } else {
-    $statement = $conn->prepare("SELECT * FROM message m");
+    $statement = $conn->prepare("SELECT p.firstName, p.lastName, p.dateOfBirth, p.telephoneNumber, p.emailAddress, d.result
+    FROM diagnostic d, person p, receive r
+    WHERE p.medicareNumber = r.medicareNumber AND r.diagnosticId = d.diagnosticId
+    ORDER BY d.result;");
     $statement->execute();
 }
 ?>
@@ -57,12 +69,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="admin-message.css">
-    <title>Admin Message</title>
+    <link rel="stylesheet" href="admin-patients-result.css">
+    <title>Admin Patients By Result Date</title>
 </head>
 
 <body>
-    <h1 class="title">Messages</h1>
+    <h1 class="title">Patients By Result Date</h1>
     <?php
     if (!empty($startDate_err)) {
         echo '<div class="alert">' . $startDate_err . '</div>';
@@ -78,29 +90,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" value="Search" />
     </form>
 
-    <table id="messages">
+    <table id="patients-result">
         <thead>
             <tr>
                 <th>
-                    Message Id
+                    First Name
                 </th>
                 <th>
-                    Description
+                    Last Name
                 </th>
                 <th>
-                    Alert Level
+                    Date Of Birth
                 </th>
                 <th>
-                    Date
+                    Telephone Number
                 </th>
                 <th>
-                    Old Alert State
+                    Email
                 </th>
                 <th>
-                    New Alert State
-                </th>
-                <th>
-                    Message Type
+                    Result
                 </th>
             </tr>
         </thead>
@@ -110,25 +119,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ?>
                 <tr>
                     <td>
-                        <?= $row["messageId"] ?>
+                        <?= $row["firstName"] ?>
                     </td>
                     <td>
-                        <?= $row["description"] ?>
+                        <?= $row["lastName"] ?>
                     </td>
                     <td>
-                        <?= $row["alertLevel"] ?>
+                        <?= $row["dateOfBirth"] ?>
                     </td>
                     <td>
-                        <?= $row["date"] ?>
+                        <?= $row["telephoneNumber"] ?>
                     </td>
                     <td>
-                        <?= $row["oldAlertState"] ?>
+                        <?= $row["emailAddress"] ?>
                     </td>
                     <td>
-                        <?= $row["newAlertState"] ?>
-                    </td>
-                    <td>
-                        <?= $row["messageType"] ?>
+                        <?= $row["result"] ?>
                     </td>
                 </tr>
             <?php } ?>

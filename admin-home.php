@@ -18,7 +18,7 @@
     <a>Manage Health Recommendation</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-message.php">Display All Messages</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-patients-address.php">Search Patients By Address</a> <br /><br />
-    <a>Search Patients By Result</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/admin-patients-result.php">Search Patients By Result Date</a> <br /><br />
     <a>Search Workers</a> <br /><br />
     <a>Facilities List</a> <br /><br />
     <a>Regions List</a> <br /><br />
