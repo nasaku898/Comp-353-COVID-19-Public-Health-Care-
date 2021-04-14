@@ -112,8 +112,8 @@ if (isset($_POST["result"]) && isset($_POST["datePerform"]) && isset($_POST["wor
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="worker-log.css">
-    <title>Worker Register</title>
+    <link rel="stylesheet" href="worker-diagnostic.css">
+    <title>Diagnostic</title>
 </head>
 
 <body>
