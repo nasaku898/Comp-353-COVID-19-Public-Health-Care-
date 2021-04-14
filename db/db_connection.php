@@ -6,7 +6,7 @@ $dbPassword = "badobrat";
 $dbName = "aec353_4";
 
 try{
-    $conn = new PDO("mysql:host=$dbServerName;dbname=$aec353_4;", $dbUsername,$dbPassword);
+    $conn = new PDO("mysql:host=$dbServerName;dbname=$dbName;", $dbUsername,$dbPassword);
 }catch(PDOException $e){
     die('Connection Failed'. $e->getMessage());
 }
