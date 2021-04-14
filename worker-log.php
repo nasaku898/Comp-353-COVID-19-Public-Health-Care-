@@ -21,7 +21,7 @@ if (isset($_POST["workerMedicareNumber"]) && isset($_POST["startDate"]) && isset
     if($past->execute()){
         unset($_POST, $last_id);
         ob_start();
-        header("location: https://aec353.encs.concordia.ca/admin-home.php");
+        header("location: https://aec353.encs.concordia.ca/worker-home.php");
         ob_end_flush();
         die();
     }
