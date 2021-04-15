@@ -1,15 +1,15 @@
 <?php
 session_start();
 
-if ((!isset($_SESSION["workerLoggedIn"]) || $_SESSION["workerLoggedIn"] !== true) && (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)) {
+if ((!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)) {
     ob_start();
-    header("location:https://aec353.encs.concordia.ca/worker-login.php");
+    header("location:https://aec353.encs.concordia.ca/admin-login.php");
     ob_end_flush();
     die();
 }
 
 require_once 'db/db_connection.php';
-require 'worker-HomeButton.php';
+require 'admin-HomeButton.php';
 
 $select = $conn->prepare('SELECT name FROM groupZone;');
 $select->execute();
@@ -56,15 +56,6 @@ $select->execute();
         $update->execute();
     }
 
-    if(isset($_POST["home"])){
-        unset($_POST, $editId, $edit, $insertId, $insert);
-        ob_start();
-        header("location: https://aec353.encs.concordia.ca/worker-home.php");
-        ob_end_flush();
-        die();
-    }
-
-    
 ?>
 
 <!DOCTYPE html>
@@ -110,7 +101,6 @@ $select->execute();
             <input type="submit" name="delete" id="button" value="Delete"></input>
         </div>
         </br>
-        <input type="submit" name="home" id="button" value="Home"></input>
     </form>
 </body>
 
