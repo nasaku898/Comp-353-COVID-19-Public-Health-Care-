@@ -1,5 +1,5 @@
 <?php require_once './db/db_connection.php';
-
+require_once './admin-HomeButton.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $regionName = $_POST["regionName"];
     $currentAlertLevel = $_POST["currentAlertLevel"];
@@ -11,12 +11,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $createRegion->bindParam(":regionName", $regionName);
         $createRegion->bindParam(":currentAlertLevel", $currentAlertLevel);
         if ($createRegion->execute()) {
+            echo '<p>Successfully created new region</p>';
             unset($_POST);
-            ob_start();
-            //Redirect to manage region when completed
-            header("location: https://aec353.encs.concordia.ca/admin-home.php");
-            ob_end_flush();
-            die();
+            // ob_start();
+            // //Redirect to manage region when completed
+            // header("location: https://aec353.encs.concordia.ca/admin-home.php");
+            // ob_end_flush();
+            // die();
         }
     }
 
@@ -31,12 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="admin-HomeButton.css">
     <title>Create Region</title>
 </head>
 
 <body>
-    <?php require './admin-HomeButton.php';?>
     <h1 class="title">Create Region</h1>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <label for="regionName">Region Name</label>

@@ -1,13 +1,3 @@
-<?php
-session_start();
-
-if (!isset($_SESSION["workerLoggedIn"]) || $_SESSION["workerLoggedIn"] !== true) {
-    ob_start();
-    header("location: https://aec353.encs.concordia.ca/worker-login.php");
-    ob_end_flush();
-    die();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +9,7 @@ if (!isset($_SESSION["workerLoggedIn"]) || $_SESSION["workerLoggedIn"] !== true)
 
 <body>
     <div class="homeButtonDiv">
-        <a href="https://aec353.encs.concordia.ca/worker-home.php">
+        <a href="https://aec353.encs.concordia.ca/admin-home.php">
             <button type="button" id="homeButton">Home</button>
         </a>
     </div>
