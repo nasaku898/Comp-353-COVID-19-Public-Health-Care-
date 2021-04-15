@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["workerLoggedIn"]) || $_SESSION["workerLoggedIn"] !== true) {
+if ((!isset($_SESSION["workerLoggedIn"]) || $_SESSION["workerLoggedIn"] !== true) && (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)) {
     ob_start();
     header("location:https://aec353.encs.concordia.ca/worker-login.php");
     ob_end_flush();
