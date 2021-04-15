@@ -141,6 +141,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="<?= $row["regionId"] ?>"> <?= $row["name"] ?> </option>
             <?php } ?>
         </select>
+        <br>
+        <input type="button" onClick="document.location.href='https://aec353.encs.concordia.ca/admin-manage-patients.php'" value="Cancel" />
         <input type="submit" value="Create" />
     </form>
 </body>

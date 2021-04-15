@@ -140,6 +140,7 @@ if (isset($_POST["center_name"]) && !empty($_POST["center_name"]) && isset($_POS
 
   if ($statementFacility->execute() && $statementAddress->execute() && $statementPostalCode->execute()) {
     if ($statementLocated->execute() && $statementInside->execute() && $statementSituatedIn->execute()) {
+      unset($_POST);
       ob_start();
       header("location: https://aec353.encs.concordia.ca/admin-home.php");
       ob_end_flush();

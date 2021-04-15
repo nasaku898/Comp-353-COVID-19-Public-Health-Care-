@@ -11,6 +11,13 @@ $statementLivesAt->bindParam(':medicare_number', $_GET["medicare_number"]);
 $statementLivesAt->execute();
 $livesAt = $statementLivesAt->fetch(PDO::FETCH_ASSOC);
 
+$statementInside = $conn->prepare('SELECT i.postalCode
+                                    FROM livesAt la, inside i
+                                    WHERE la.medicareNumber = :medicare_number AND la.city = i.city AND la.civicNumber = i.civicNumber AND la.streetName = i.streetName;');
+$statementInside->bindParam(':medicare_number', $_GET["medicare_number"]);
+$statementInside->execute();
+$inside = $statementInside->fetch(PDO::FETCH_ASSOC);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Personal information
     $firstName = $_POST["first_name"];
@@ -21,13 +28,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = $_POST["gender"];
     $medicareNumber = $_POST["medicare_number"];
 
-    //LivesAt
+    //Address
     $civicNumber = $_POST["civic_number"];
     $streetName = $_POST["street_name"];
     $city = $_POST["city"];
     $oldCivicNumber = $_POST["old_civic_number"];
     $oldStreetName = $_POST["old_street_name"];
     $oldCity = $_POST["old_city"];
+    $oldPostalCode = $_POST["old_postal_code"];
+    $postalCode = $_POST["postal_code"];
 
     if (empty(trim($firstName)) 
         || empty(trim($lastName)) 
@@ -68,7 +77,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updateAddress->bindParam(":oldCivicNumber", $oldCivicNumber);
         $updateAddress->bindParam(":oldCity", $oldCity);
 
-        if ($updatePerson->execute() && $updateAddress->execute()) {
+        $updatePostalCode = $conn->prepare("UPDATE IGNORE postalArea SET
+                                            postalCode = :postalCode
+                                            WHERE postalCode = :oldPostalCode;");
+        $updatePostalCode->bindParam(":postalCode", $postalCode); 
+        $updatePostalCode->bindParam(":oldPostalCode", $oldPostalCode);
+
+        if ($updatePerson->execute() && $updatePostalCode->execute() && $updateAddress->execute()) {
             unset($_POST);
             ob_start();
             header("location: https://aec353.encs.concordia.ca/admin-manage-patients.php");
@@ -81,7 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,7 +134,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="city"> City: </label>
         <input type="text" name="city" id="city" value="<?= $livesAt['city'] ?>">
         <br>
-
+        <label for="postal_code"> Postal Code:</label>
+        <input type="text" name="postal_code" id="postal_code" value="<?= $inside['postalCode'] ?>">
+        <br>
         <input type="button" onClick="document.location.href='https://aec353.encs.concordia.ca/admin-manage-patients.php'" value="Cancel" />
         <button type="submit"> Update </button>
         <br>
@@ -128,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="hidden" name="old_civic_number" value="<?= $livesAt['civicNumber'] ?>">
         <input type="hidden" name="old_street_name" value="<?= $livesAt['streetName'] ?>">
         <input type="hidden" name="old_city" value="<?= $livesAt['city'] ?>">
-        <input type="hidden" name="old_postal_code" value="<?= $livesAt['postalCode'] ?>">
+        <input type="hidden" name="old_postal_code" id="old_postal_code" value="<?= $inside['postalCode'] ?>">
     </form>
 
 </body>
