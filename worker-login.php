@@ -3,12 +3,13 @@ require_once 'db/db_connection.php';
 session_start();
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
-if (isset($_SESSION["patientLoggedIn"]) && $_SESSION["patientLoggedIn"] === true) {
+if (isset($_SESSION["workerLoggedIn"]) && $_SESSION["workerLoggedIn"] === true) {
     ob_start();
-    header("location: https://aec353.encs.concordia.ca/patient-home.php");
+    header("location: https://aec353.encs.concordia.ca/worker-home.php");
     ob_end_flush();
     die();
 }
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -18,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($medicareNumber)) || empty(trim($dateOfBirth))) {
         echo '<p>Please fill the form completely</p>';
     } else {
-        $statement = $conn->prepare('SELECT medicareNumber, dateOfBirth from person where person.medicareNumber = :medicareNumber and person.dateOfBirth = :dateOfBirth');
+        $statement = $conn->prepare('SELECT publicHealthWorker.medicareNumber from person, publicHealthWorker  where publicHealthWorker.medicareNumber = :medicareNumber and person.medicareNumber = :medicareNumber and person.dateOfBirth = :dateOfBirth');
         $statement->bindParam(":medicareNumber", $medicareNumber);
         $statement->bindParam(":dateOfBirth", $dateOfBirth);
         if ($statement->execute()) {
@@ -27,13 +28,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 while ($row = $statement->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) {
                     if (isset($row["medicareNumber"])) {
-                        $_SESSION["patientMedicareNumber"] = $row["medicareNumber"];
-                        $_SESSION["patientLoggedIn"] = true;
+                        $_SESSION["workerMedicareNumber"] = $row["medicareNumber"];
+                        $_SESSION["workerLoggedIn"] = true;
                     }
                 }
                 ob_start();
                 // Redirect user to welcome page
-                header("location: https://aec353.encs.concordia.ca/patient-home.php");
+                header("location: https://aec353.encs.concordia.ca/worker-home.php");
                 ob_end_flush();
                 die();
             }
