@@ -23,7 +23,7 @@
     <a>Search Workers</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-facilities.php">Facilities List</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-regions.php">Regions List</a> <br /><br />
-    <a>Region Report</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/admin-region-report.php">Regions Report</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/logout.php">Logout</a> <br /><br />
 </body>
 
