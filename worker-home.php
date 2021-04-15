@@ -12,7 +12,7 @@
     <h1 class="title">Worker Home</h1>
     <a>Register Health Worker</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/worker-diagnostic.php">Enter Diagnostic</a> <br /><br />
-    <a href="https://aec353.encs.concordia.ca/group-zone.php">Group Zone</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/worker-group-zone.php">Group Zone</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/worker-log.php">Log Work History</a> <br /><br />
     <a>Logout</a> <br /><br />
 </body>

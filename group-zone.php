@@ -72,7 +72,7 @@ $select->execute();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="worker-group-zone.css">
+    <link rel="stylesheet" href="group-zone.css">
     <title>Group Zone</title>
 </head>
 
