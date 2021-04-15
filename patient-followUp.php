@@ -12,13 +12,16 @@ require_once 'db/db_connection.php';
 $fetchSymptoms = $conn->prepare("SELECT name from symptoms");
 $fetchSymptoms->execute();
 
+$fetchDiagnosticId = $conn->prepare("SELECT d.diagnosticId FROM diagnostic d, receive r, person p WHERE p.medicareNumber = :medicareNumber and r.medicareNumber = p.medicareNumber and r.diagnosticId = d.diagnosticId");
+$fetchDiagnosticId->bindParam(":medicareNumber", $_SESSION["patientMedicareNumber"]);
+$fetchDiagnosticId->execute();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $temperture = $_POST["temperature"];
     $followUpDate = $_POST["followUpDate"];
     $otherSymptoms = $_POST["otherSymptoms"];
     $diagnosticId = $_POST["diagnosticId"];
 
-    echo $diagnosticId;
     if (empty(trim($temperture)) || empty(trim($followUpDate)) || empty(trim($diagnosticId))) {
         echo '<p>Please fill the form completely</p>';
     } else {
@@ -32,9 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $createDiagnosticFollowUp = $conn->prepare("INSERT INTO diagnosticFollowUp(diagnosticId, followUpId) VALUES(:diagnosticId, :followUpId)");
         $createDiagnosticFollowUp->bindParam(":diagnosticId", $diagnosticId);
-        $createDiagnosticFollowUp->bindParam("followUpId",$followUpId);
+        $createDiagnosticFollowUp->bindParam("followUpId", $followUpId);
         $createDiagnosticFollowUp->execute();
-        
+
         $symptoms = $conn->prepare("INSERT INTO symptomsStatus(name, followUpId) VALUES(:name, :followUpId)");
 
         if (isset($_POST["fever"])) {
@@ -122,8 +125,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <h3>Patient information</h3>
         <label>Diagnostic Id</label>
-        <input type="number" id="diagnosticId" name="diagnosticId">
-        <br/>
+        <select id="diagnosticId" name="diagnosticId">
+            <?php while ($row = $fetchDiagnosticId->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
+                <option value="<?= $row["diagnosticId"] ?>"> <?= $row["diagnosticId"] ?> </option>
+            <?php } ?>
+        </select>
+        <br />
         <label>Temperature</label>
         <input type="number" id="temperature" name="temperature">
         <br />
