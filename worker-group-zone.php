@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+if (!isset($_SESSION["workerLoggedIn"]) || $_SESSION["workerLoggedIn"] !== true) {
+    ob_start();
+    header("location:https://aec353.encs.concordia.ca/worker-login.php");
+    ob_end_flush();
+    die();
+}
+
 require_once 'db/db_connection.php';
 
 $select = $conn->prepare('SELECT name FROM groupZone;');
@@ -63,7 +72,7 @@ $select->execute();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="group-zone.css">
+    <link rel="stylesheet" href="worker-group-zone.css">
     <title>Group Zone</title>
 </head>
 
