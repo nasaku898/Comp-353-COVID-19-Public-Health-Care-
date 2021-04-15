@@ -9,6 +9,7 @@ if ((!isset($_SESSION["workerLoggedIn"]) || $_SESSION["workerLoggedIn"] !== true
 }
 
 require_once 'db/db_connection.php';
+require 'worker-HomeButton.php';
 
 $select = $conn->prepare('SELECT name FROM groupZone;');
 $select->execute();
