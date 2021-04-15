@@ -12,8 +12,12 @@
 <body>
     <h1 class="title">Welcome</h1>
     <div class="button">
-        <button type="button" class="specificButton">Patient</button>
-        <button type="button" class="specificButton">Worker</button>
+        <a href="https://aec353.encs.concordia.ca/patient-login.php">
+            <button type="button" class="specificButton">Patient</button>
+        </a>
+        <a href="https://aec353.encs.concordia.ca/worker-login.php">
+            <button type="button" class="specificButton">Worker</button>
+        </a>
         <a href="https://aec353.encs.concordia.ca/admin-login.php">
             <button type="button" class="specificButton">Admin</button>
         </a>
