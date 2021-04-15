@@ -22,67 +22,67 @@ if (isset($_POST["result"]) && isset($_POST["datePerform"]) && isset($_POST["wor
     $last_id = $conn->lastInsertId();
 
     $symptoms = $conn->prepare("INSERT INTO detects(diagnosticId, name) VALUES (:diagnosticId, :name);");
-    if(isset($_POST["fever"])){
+    if (isset($_POST["fever"])) {
         $symptom = "Fever";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["cough"])){
+    if (isset($_POST["cough"])) {
         $symptom = "Cough";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["shortness"])){
+    if (isset($_POST["shortness"])) {
         $symptom = "Shortness";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["lossTaste"])){
+    if (isset($_POST["lossTaste"])) {
         $symptom = "Loss Taste";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["nausea"])){
+    if (isset($_POST["nausea"])) {
         $symptom = "Nausea";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["stomach"])){
+    if (isset($_POST["stomach"])) {
         $symptom = "Stomach Ache";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["vomit"])){
+    if (isset($_POST["vomit"])) {
         $symptom = "Vomit";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["headache"])){
+    if (isset($_POST["headache"])) {
         $symptom = "Headache";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["muscle"])){
+    if (isset($_POST["muscle"])) {
         $symptom = "Muscle Pain";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["diarrhea"])){
+    if (isset($_POST["diarrhea"])) {
         $symptom = "Diarrhea";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
         $symptoms->execute();
     }
-    if(isset($_POST["sore"])){
+    if (isset($_POST["sore"])) {
         $symptom = "Sore Throat";
         $symptoms->bindParam(':diagnosticId', $last_id);
         $symptoms->bindParam(':name', $symptom);
@@ -104,7 +104,7 @@ if (isset($_POST["result"]) && isset($_POST["datePerform"]) && isset($_POST["wor
     $receive->bindParam(':medicareNumber', $_POST["patientMedicareNumber"]);
     $receive->bindParam(':centerName', $_POST["center"]);
 
-    if($receive->execute()){
+    if ($receive->execute()) {
         unset($_POST, $last_id);
         ob_start();
         header("location: https://aec353.encs.concordia.ca/worker-home.php");
@@ -121,11 +121,17 @@ if (isset($_POST["result"]) && isset($_POST["datePerform"]) && isset($_POST["wor
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="worker-diagnostic.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
     <title>Diagnostic</title>
 </head>
 
 <body>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <div class="homeButtonDiv">
+            <a href="https://aec353.encs.concordia.ca/worker-home.php">
+                <button type="button" id="homeButton">Home</button>
+            </a>
+        </div>
         <h1 class="title">Enter Diagnostic</h1>
         <p>Health Care Worker Information</p>
         <div id="form">
@@ -135,10 +141,10 @@ if (isset($_POST["result"]) && isset($_POST["datePerform"]) && isset($_POST["wor
         <div id="form">
             <p>Health Center</p>
             <select name="center" id="input_box">
-            <?php while ($row = $select->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
-                <option value="<?= $row["centerName"] ?>"> <?= $row["centerName"] ?> </option>
-            <?php } ?>
-        </select>
+                <?php while ($row = $select->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
+                    <option value="<?= $row["centerName"] ?>"> <?= $row["centerName"] ?> </option>
+                <?php } ?>
+            </select>
         </div>
         </br>
         <p>Patient Information</p>

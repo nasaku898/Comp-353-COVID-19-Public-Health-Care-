@@ -26,7 +26,7 @@ if (isset($_POST["workerMedicareNumber"]) && isset($_POST["startDate"]) && isset
     $past->bindParam(':workHistoryId', $last_id);
     $past->execute();
 
-    if($past->execute()){
+    if ($past->execute()) {
         unset($_POST, $last_id);
         ob_start();
         header("location: https://aec353.encs.concordia.ca/worker-home.php");
@@ -43,11 +43,17 @@ if (isset($_POST["workerMedicareNumber"]) && isset($_POST["startDate"]) && isset
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="worker-log.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
     <title>Diagnostic</title>
 </head>
 
 <body>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <div class="homeButtonDiv">
+            <a href="https://aec353.encs.concordia.ca/worker-home.php">
+                <button type="button" id="homeButton">Home</button>
+            </a>
+        </div>
         <h1 class="title">Work Log History</h1>
         <p>Health Care Worker Information</p>
         <div id="form">
@@ -65,10 +71,10 @@ if (isset($_POST["workerMedicareNumber"]) && isset($_POST["startDate"]) && isset
         <div id="form">
             <p>Health Center</p>
             <select name="center" id="input_box">
-            <?php while ($row = $select->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
-                <option value="<?= $row["centerName"] ?>"> <?= $row["centerName"] ?> </option>
-            <?php } ?>
-        </select>
+                <?php while ($row = $select->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
+                    <option value="<?= $row["centerName"] ?>"> <?= $row["centerName"] ?> </option>
+                <?php } ?>
+            </select>
         </div>
         </br>
         <Button type="submit">Log</Button>
