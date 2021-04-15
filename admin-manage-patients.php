@@ -1,54 +1,12 @@
-<?php
-// Initialize the session
-session_start();
+<?php 
+require_once 'db/db_connection.php';
 
-// Check if the user is already logged in, if yes then redirect him to welcome page
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    ob_start();
-    header("location: https://aec353.encs.concordia.ca/admin-home.php");
-    ob_end_flush();
-    die();
-}
-
-// Define variables and initialize with empty values
-$username = $password = "";
-$username_err = $password_err = $login_err = "";
-
-// Processing form data when form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // Check if username is empty
-    if (empty(trim($_POST["username"]))) {
-        $username_err = "Please enter username.";
-    } else {
-        $username = trim($_POST["username"]);
-    }
-
-    // Check if password is empty
-    if (empty(trim($_POST["password"]))) {
-        $password_err = "Please enter your password.";
-    } else {
-        $password = trim($_POST["password"]);
-    }
-
-    // Validate credentials
-    if (empty($username_err) && empty($password_err)) {
-        if ($username == "admin" && $password == "Password123!") {
-            session_start();
-
-            $_SESSION["loggedin"] = true;
-
-            ob_start();
-            // Redirect user to welcome page
-            header("location: https://aec353.encs.concordia.ca/admin-home.php");
-            ob_end_flush();
-            die();
-        } else {
-            // Password is not valid, display a generic error message
-            $login_err = "Invalid username or password.";
-        }
-    }
-}
+$statementPerson = $conn->prepare('SELECT DISTINCT p.medicareNumber, p.telephoneNumber, p.dateOfBirth, p.citizenship, p.firstName, p.lastName, p.gender, p.emailAddress, a.city, a.civicNumber, a.streetName, pa.postalCode
+                                    FROM person p, address a, livesAt la, postalArea pa, inside i
+                                    WHERE p.medicareNumber = la.medicareNumber AND a.city = la.city AND a.civicNumber = la.civicNumber AND a.streetName = la.streetName
+                                    AND a.city = i.city AND a.civicNumber = i.civicNumber AND a.streetName = i.streetName AND pa.postalCode = i.postalCode
+                                    AND p.medicareNumber NOT IN (SELECT phw.medicareNumber FROM publicHealthWorker phw);');
+$statementPerson->execute();
 ?>
 
 <!DOCTYPE html>
@@ -57,12 +15,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="admin-home.css">
+    <link rel="stylesheet" href="admin-table.css">
     <title>Manage Patients</title>
 </head>
 
 <body>
-    <h1 class="title">Manage Patients</h1>
+    <h1> Manage Patients </h1>
+    <br>
+    <button onClick="document.location.href='https://aec353.encs.concordia.ca/patient-register.php'">Add New Patient</button>
+    <br>
+    <table id="admin-table">
+        <thead>
+            <tr>
+                <th>Medicare Number</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Telephone Number</th>
+                <th>Citizenship</th>
+                <th>Email Address</th>
+                <th>City</th>
+                <th>Civic Number</th>
+                <th>Street Name</th>
+                <th>Postal Code</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($rowPerson = $statementPerson->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
+                <tr>
+                    <td><?= $rowPerson["medicareNumber"] ?></td>
+                    <td><?= $rowPerson["firstName"] ?></td>
+                    <td><?= $rowPerson["lastName"] ?></td>
+                    <td><?= $rowPerson["dateOfBirth"] ?></td>
+                    <td><?= $rowPerson["gender"] ?></td>
+                    <td><?= $rowPerson["telephoneNumber"] ?></td>
+                    <td><?= $rowPerson["citizenship"] ?></td>
+                    <td><?= $rowPerson["emailAddress"] ?></td>
+                    <td><?= $rowPerson["city"] ?></td>
+                    <td><?= $rowPerson["civicNumber"] ?></td>
+                    <td><?= $rowPerson["streetName"] ?></td>
+                    <td><?= $rowPerson["postalCode"] ?></td>
+                    <td>
+                        <a href="./admin-edit-patient.php?medicare_number=<?= $rowPerson["medicareNumber"] ?>"> Edit </a>
+                        <a href="./admin-delete-patient.php?medicare_number=<?= $rowPerson["medicareNumber"] ?>"> Delete </a>
+                    </td>
+                </tr>
+            <?php }?>
+        </tbody>
+    </table>
 </body>
-
 </html>
