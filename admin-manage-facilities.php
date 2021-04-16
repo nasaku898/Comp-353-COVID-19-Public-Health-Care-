@@ -60,7 +60,7 @@ $statementFacility->execute();
                     <td><?= $rowFacility["postalCode"] ?></td>
                     <td>
                         <a href="./admin-edit-facility.php?center_name=<?= $rowFacility["centerName"] ?>"> Edit </a>
-                        <a href="./admin-delete-facility.php?center_name=<?= $rowFacility["cennterName"] ?>"> Delete </a>
+                        <a href="./admin-delete-facility.php?center_name=<?= $rowFacility["centerName"] ?>"> Delete </a>
                     </td>
                 </tr>
             <?php }?>
