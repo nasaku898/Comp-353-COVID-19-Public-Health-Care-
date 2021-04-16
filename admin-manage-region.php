@@ -43,7 +43,7 @@ $statementRegion->execute();
                     <td><?= $rowRegion["alertLevel"] ?></td>
                     <td>
                         <a href="./admin-edit-facility.php?regionId=<?= $rowRegion["regionId"] ?>"> Edit </a>
-                        <a href="./admin-delete-facility.php?regionId=<?= $rowRegion["regionId"] ?>"> Delete </a>
+                        <a href="./admin-delete-region.php?regionId=<?= $rowRegion["regionId"] ?>"> Delete </a>
                     </td>
                 </tr>
             <?php }?>
