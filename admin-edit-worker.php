@@ -18,6 +18,16 @@ $statementInside->bindParam(':medicare_number', $_GET["medicare_number"]);
 $statementInside->execute();
 $inside = $statementInside->fetch(PDO::FETCH_ASSOC);
 
+$statementCenter = $conn->prepare('SELECT phc.centerName
+                                    FROM publicHealthCenter phc, worksAt wa
+                                    WHERE wa.medicareNumber =:medicare_number AND wa.centerName = phc.centerName;');
+$statementCenter->bindParam(':medicare_number', $_GET["medicare_number"]);
+$statementCenter->execute();
+$center = $statementCenter->fetch(PDO::FETCH_ASSOC);
+
+$centerName = $conn->prepare('SELECT distinct centerName FROM publicHealthCenter');
+$centerName->execute();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Personal information
     $firstName = $_POST["first_name"];
@@ -38,16 +48,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $oldPostalCode = $_POST["old_postal_code"];
     $postalCode = $_POST["postal_code"];
 
+    //Center
+    $centerName = $_POST["center_name"];
+    $oldCenterName = $_POST["old_center_name"];
+
+
     if (empty(trim($firstName)) 
         || empty(trim($lastName)) 
         || empty(trim($telephoneNumber)) 
         || empty(trim($citizenship)) 
         || empty(trim($email)) 
-        || empty(trim($gender))
         || empty(trim($civicNumber)) 
         || empty(trim($streetName)) 
         || empty(trim($city))
-        || empty(trim($postalCode))) {
+        || empty(trim($postalCode))
+        || empty(($centerName))) {
         $error = "error";
         echo $error;
     } else {
@@ -84,10 +99,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updatePostalCode->bindParam(":postalCode", $postalCode); 
         $updatePostalCode->bindParam(":oldPostalCode", $oldPostalCode);
 
-        if ($updatePerson->execute() && $updatePostalCode->execute() && $updateAddress->execute()) {
+        $updateCenter = $conn->prepare("UPDATE IGNORE worksAt SET
+            centerName = :centerName
+            WHERE centerName = :oldCenterName AND medicareNumber = :medicareNumber;");
+        $updateCenter->bindParam(":centerName", $centerName); 
+        $updateCenter->bindParam(":oldCenterName", $oldCenterName);
+        $updateCenter->bindParam(":medicareNumber", $medicareNumber);
+
+        if ($updatePerson->execute() && $updatePostalCode->execute() && $updateAddress->execute() && $updateCenter->execute()) {
             unset($_POST);
             ob_start();
-            header("location: https://aec353.encs.concordia.ca/admin-manage-patients.php");
+            header("location: https://aec353.encs.concordia.ca/admin-manage-workers.php");
             ob_end_flush();
             die();
         }
@@ -100,13 +122,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="admin-edit-patient.css">
-    <title>Edit Patient</title>
+    <link rel="stylesheet">
+    <title>Edit Health Worker</title>
 </head>
 
 <body>
-    <h1> Edit Patient </h1>
-    <form action="./admin-edit-patient.php" method="post">
+    <h1> Edit Health Worker </h1>
+    <form action="./admin-edit-worker.php" method="post">
         <label for="first_name"> First Name: </label>
         <input type="text" name="first_name" id="first_name" value="<?= $patient['firstName'] ?>">
         <br>
@@ -141,7 +163,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="postal_code"> Postal Code:</label>
         <input type="text" name="postal_code" id="postal_code" value="<?= $inside['postalCode'] ?>">
         <br>
-        <input type="button" onClick="document.location.href='https://aec353.encs.concordia.ca/admin-manage-patients.php'" value="Cancel" />
+        <label>Center Name (Previous: <?= $center['centerName'] ?>):</label>
+        <select name="center_name" id="workplace">
+            <?php while ($row = $centerName->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
+                <option value="<?= $row["centerName"] ?>"> <?= $row["centerName"] ?> </option>
+            <?php } ?>
+        </select>
+        <br>
+        <input type="button" onClick="document.location.href='https://aec353.encs.concordia.ca/admin-manage-workers.php'" value="Cancel" />
         <button type="submit"> Update </button>
         <br>
         <input type="hidden" name="medicare_number" value="<?= $patient['medicareNumber'] ?>">
@@ -149,6 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="hidden" name="old_street_name" value="<?= $livesAt['streetName'] ?>">
         <input type="hidden" name="old_city" value="<?= $livesAt['city'] ?>">
         <input type="hidden" name="old_postal_code" id="old_postal_code" value="<?= $inside['postalCode'] ?>">
+        <input type="hidden" name="old_center_name" id="old_center_name" value="<?= $center['centerName'] ?>">
     </form>
 
 </body>

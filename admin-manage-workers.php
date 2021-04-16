@@ -1,11 +1,12 @@
 <?php 
 require_once 'db/db_connection.php';
 
-$statementPerson = $conn->prepare('SELECT DISTINCT p.medicareNumber, p.telephoneNumber, p.dateOfBirth, p.citizenship, p.firstName, p.lastName, p.gender, p.emailAddress, a.city, a.civicNumber, a.streetName, pa.postalCode
-                                    FROM person p, address a, livesAt la, postalArea pa, inside i
+$statementPerson = $conn->prepare('SELECT p.medicareNumber, p.telephoneNumber, p.dateOfBirth, p.citizenship, p.firstName, p.lastName, p.gender, p.emailAddress, a.city, a.civicNumber, a.streetName, pa.postalCode, phc.centerName
+                                    FROM publicHealthWorker phw, worksAt wa, publicHealthCenter phc, person p, address a, livesAt la, postalArea pa, inside i
                                     WHERE p.medicareNumber = la.medicareNumber AND a.city = la.city AND a.civicNumber = la.civicNumber AND a.streetName = la.streetName
                                     AND a.city = i.city AND a.civicNumber = i.civicNumber AND a.streetName = i.streetName AND pa.postalCode = i.postalCode
-                                    AND p.medicareNumber NOT IN (SELECT phw.medicareNumber FROM publicHealthWorker phw);');
+                                    AND p.medicareNumber = phw.medicareNumber 
+                                    AND phw.medicareNumber = wa.medicareNumber AND phc.centerName = wa.centerName;');
 $statementPerson->execute();
 ?>
 
@@ -16,13 +17,13 @@ $statementPerson->execute();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-table.css">
-    <title>Manage Patients</title>
+    <title>Manage Health Workers</title>
 </head>
 
 <body>
-    <h1> Manage Patients </h1>
+    <h1> Manage Health Workers </h1>
     <br>
-    <button onClick="document.location.href='https://aec353.encs.concordia.ca/patient-register.php'">Add New Patient</button>
+    <button onClick="document.location.href='https://aec353.encs.concordia.ca/worker-registration.php'">Add New Health Worker</button>
     <br>
     <table id="admin-table">
         <thead>
@@ -39,6 +40,7 @@ $statementPerson->execute();
                 <th>Civic Number</th>
                 <th>Street Name</th>
                 <th>Postal Code</th>
+                <th>Center Name</th>
                 <th></th>
             </tr>
         </thead>
@@ -57,9 +59,10 @@ $statementPerson->execute();
                     <td><?= $rowPerson["civicNumber"] ?></td>
                     <td><?= $rowPerson["streetName"] ?></td>
                     <td><?= $rowPerson["postalCode"] ?></td>
+                    <td><?= $rowPerson["centerName"] ?></td>
                     <td>
-                        <a href="./admin-edit-patient.php?medicare_number=<?= $rowPerson["medicareNumber"] ?>"> Edit </a>
-                        <a href="./admin-delete-patient.php?medicare_number=<?= $rowPerson["medicareNumber"] ?>"> Delete </a>
+                        <a href="./admin-edit-worker.php?medicare_number=<?= $rowPerson["medicareNumber"] ?>"> Edit </a>
+                        <a href="./admin-delete-worker.php?medicare_number=<?= $rowPerson["medicareNumber"] ?>"> Delete </a>
                     </td>
                 </tr>
             <?php }?>
