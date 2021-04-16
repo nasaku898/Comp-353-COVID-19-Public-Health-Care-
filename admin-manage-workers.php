@@ -17,10 +17,16 @@ $statementPerson->execute();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-table.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
     <title>Manage Health Workers</title>
 </head>
 
 <body>
+    <div class="homeButtonDiv"> 
+        <a href="https://aec353.encs.concordia.ca/admin-home.php">
+            <button type="button" id="homeButton">Home</button>
+        </a>
+    </div>
     <h1> Manage Health Workers </h1>
     <br>
     <button onClick="document.location.href='https://aec353.encs.concordia.ca/worker-registration.php'">Add New Health Worker</button>

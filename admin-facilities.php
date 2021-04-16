@@ -94,7 +94,6 @@ $statement->execute();
             <?php } ?>
         </tbody>
     </table>
-
 </body>
 
 </html>

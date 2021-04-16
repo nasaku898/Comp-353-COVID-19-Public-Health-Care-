@@ -22,9 +22,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 <body>
     <h1 class="title">Home</h1>
-    <a>Manage Patients</a> <br /><br />
-    <a>Manage Workers</a> <br /><br />
-    <a>Manage Facilities</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/admin-manage-patients.php">Manage Patients</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/admin-manage-workers.php">Manage Workers</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/admin-manage-facilities.php">Manage Facilities</a> <br /><br />
     <a>Manage Region</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-group-zone.php">Manage Group Zone</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-recommendation.php">Manage Health Recommendation</a> <br /><br />
