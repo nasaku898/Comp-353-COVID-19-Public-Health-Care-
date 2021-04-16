@@ -27,19 +27,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!empty($startDate_err) || !empty($endDate_err)) {
-        $statement = $conn->prepare("SELECT m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations, group_concat(p.medicareNumber) as medicareNumbers, group_concat(DISTINCT r.name) as regions
+        $statement = $conn->prepare("SELECT m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations, group_concat(p.emailAddress) as emails, group_concat(DISTINCT r.name) as regions
         FROM message m
         LEFT JOIN
         (
-        SELECT m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, group_concat(r.description SEPARATOR '$') as recommendations
+        SELECT m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, group_concat(r.description SEPARATOR '$') as recommendations
         FROM message m, ofType ot, recommendation r
         WHERE m.messageId = ot.messageId AND ot.recommendationId = r.recommendationId
-        GROUP BY m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType
+        GROUP BY m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType
         ) as guidelines on m.messageId = guidelines.messageId
         LEFT JOIN notifies n on n.messageId = m.messageId
         LEFT JOIN person p on p.medicareNumber = n.medicareNumber
         LEFT JOIN region r on n.regionId = r.regionId
-        GROUP BY m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations");
+        GROUP BY m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations");
         $statement->execute();
     }
 
@@ -48,54 +48,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if start date greater than end date
         if ($startDate > $endDate) {
             $endDate_err = "Invalid date. 'From' date greater than 'To' date.";
-            $statement = $conn->prepare("SELECT m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations, group_concat(p.medicareNumber) as medicareNumbers, group_concat(DISTINCT r.name) as regions
+            $statement = $conn->prepare("SELECT m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations, group_concat(p.emailAddress) as emails, group_concat(DISTINCT r.name) as regions
             FROM message m
             LEFT JOIN
             (
-            SELECT m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, group_concat(r.description SEPARATOR '$') as recommendations
+            SELECT m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, group_concat(r.description SEPARATOR '$') as recommendations
             FROM message m, ofType ot, recommendation r
             WHERE m.messageId = ot.messageId AND ot.recommendationId = r.recommendationId
-            GROUP BY m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType
+            GROUP BY m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType
             ) as guidelines on m.messageId = guidelines.messageId
             LEFT JOIN notifies n on n.messageId = m.messageId
             LEFT JOIN person p on p.medicareNumber = n.medicareNumber
             LEFT JOIN region r on n.regionId = r.regionId
-            GROUP BY m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations");
+            GROUP BY m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations");
             $statement->execute();
         } else {
-            $statement = $conn->prepare("SELECT m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations, group_concat(p.medicareNumber) as medicareNumbers, group_concat(DISTINCT r.name) as regions
+            $statement = $conn->prepare("SELECT m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations, group_concat(p.emailAddress) as emails, group_concat(DISTINCT r.name) as regions
             FROM message m
             LEFT JOIN
             (
-            SELECT m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, group_concat(r.description SEPARATOR '$') as recommendations
+            SELECT m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, group_concat(r.description SEPARATOR '$') as recommendations
             FROM message m, ofType ot, recommendation r
             WHERE m.messageId = ot.messageId AND ot.recommendationId = r.recommendationId
-            GROUP BY m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType
+            GROUP BY m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType
             ) as guidelines on m.messageId = guidelines.messageId
             LEFT JOIN notifies n on n.messageId = m.messageId
             LEFT JOIN person p on p.medicareNumber = n.medicareNumber
             LEFT JOIN region r on n.regionId = r.regionId
             WHERE m.date>=:startDate AND m.date<=:endDate
-            GROUP BY m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations");
+            GROUP BY m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations");
             $statement->bindParam(":startDate", $startDate);
             $statement->bindParam(":endDate", $endDate);
             $statement->execute();
         }
     }
 } else {
-    $statement = $conn->prepare("SELECT m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations, group_concat(p.medicareNumber) as medicareNumbers, group_concat(DISTINCT r.name) as regions
+    $statement = $conn->prepare("SELECT m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations, group_concat(p.emailAddress) as emails, group_concat(DISTINCT r.name) as regions
     FROM message m
     LEFT JOIN
     (
-    SELECT m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, group_concat(r.description SEPARATOR '$') as recommendations
+    SELECT m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, group_concat(r.description SEPARATOR '$') as recommendations
     FROM message m, ofType ot, recommendation r
     WHERE m.messageId = ot.messageId AND ot.recommendationId = r.recommendationId
-    GROUP BY m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType
+    GROUP BY m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType
     ) as guidelines on m.messageId = guidelines.messageId
     LEFT JOIN notifies n on n.messageId = m.messageId
     LEFT JOIN person p on p.medicareNumber = n.medicareNumber
     LEFT JOIN region r on n.regionId = r.regionId
-    GROUP BY m.messageId, m.description, m.alertLevel, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations");
+    GROUP BY m.messageId, m.description, m.date, m.oldAlertState, m.newAlertState, m.messageType, guidelines.recommendations");
     $statement->execute();
 }
 ?>
@@ -139,13 +139,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     Description
                 </th>
                 <th>
-                    Medicare Numbers
+                    Emails
                 </th>
                 <th>
                     Regions
-                </th>
-                <th>
-                    Alert Level
                 </th>
                 <th>
                     Date
@@ -178,12 +175,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <td class="tdDynamicSmall">
                         <div class="divDynamic">
                             <?php
-                            if (isset($row["medicareNumbers"])) {
+                            if (isset($row["emails"])) {
                             ?>
                                 <ul>
                                     <?php
-                                    $medicareNumbers = explode(",", trim($row["medicareNumbers"]));
-                                    foreach ($medicareNumbers as $value) {
+                                    $emails = explode(",", trim($row["emails"]));
+                                    foreach ($emails as $value) {
                                     ?>
                                         <li>
                                             <?= $value ?>
@@ -214,9 +211,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </ul>
                             <?php } ?>
                         </div>
-                    </td>
-                    <td>
-                        <?= $row["alertLevel"] ?>
                     </td>
                     <td>
                         <?= $row["date"] ?>
