@@ -40,14 +40,14 @@ if(isset($_POST["editId"]) && isset($_POST["edit"]) && isset($_POST["recommendat
     <h1 class="title">Manage Recommendation</h1>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <h3>Create Recommendation</h3>
-        <p>Enter new Message</p>
+        <p>Enter new Recommendation</p>
         <input type="text" name="recommendationCreate" id="input_box">
         <input type="submit" name="create" value="Create" id="button"></input>
         </br>
         <h3>Edit Recommendation</h3>
         <p>Enter Id</p>
         <input type="text" name="editId">
-        <p>Enter new Message</p>
+        <p>Enter new Recommendation</p>
         <input type="text" name="recommendationEdit" id="input_box">
         <input type="submit" name="edit" value="Edit" id="button"></input>
         </br>
@@ -61,7 +61,7 @@ if(isset($_POST["editId"]) && isset($_POST["edit"]) && isset($_POST["recommendat
         <thead>
             <tr>
                 <th>
-                    Message Id
+                    Recommendation Id
                 </th>
                 <th>
                     Description
