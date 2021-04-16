@@ -46,7 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         || empty(trim($gender))
         || empty(trim($civicNumber)) 
         || empty(trim($streetName)) 
-        || empty(trim($city))) {
+        || empty(trim($city))
+        || empty(trim($postalCode))) {
         $error = "error";
         echo $error;
     } else {
