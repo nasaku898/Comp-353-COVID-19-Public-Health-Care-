@@ -12,12 +12,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(trim($regionName)) || empty(trim($currentAlertLevel))) {
         echo '<p>Please fill the form completely</p>';
     } else {
-        $createRegion = $conn->prepare('UPDATE region SET name=:regionName, alertLevel = :currentAlertLevel WHERE region.regionId = :regionId');
-        $createRegion->bindParam(":regionName", $regionName);
-        $createRegion->bindParam(":currentAlertLevel", $currentAlertLevel);
-        echo $region["regionId"];
-        $createRegion->bindParam(":regionId", $region["regionId"]);
-        if ($createRegion->execute()) {
+        $updateRegion = $conn->prepare('UPDATE region SET name=:regionName, alertLevel = :currentAlertLevel WHERE region.regionId = :regionId');
+        $updateRegion->bindParam(":regionName", $regionName);
+        $updateRegion->bindParam(":currentAlertLevel", $currentAlertLevel);
+        $updateRegion->bindParam(":regionId", $_POST["regionId"]);
+        if ($updateRegion->execute()) {
             unset($_POST);
             ob_start();
             //Redirect to manage region when completed
@@ -55,12 +54,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <br />
         <label for="currentAlertLevel">Current Alert Level</label>
         <select name="currentAlertLevel" id="currentAlertLevel" value="<?= $region["alertLevel"] ?>">
-            <option value="green">Green</option>
-            <option value="orange">Orange</option>
-            <option value="yellow">Yellow</option>
-            <option value="red">Red</option>
+            <?php
+            if ($region["alertLevel"] === "GREEN") {
+                echo '<option value="yellow">Yellow</option>';
+            } else if ($region["alertLevel"] === "YELLOW") {
+                echo '<option value="green">Green</option>
+                    <option value="orange">Orange</option>';
+            } else if ($region["alertLevel"] === "ORANGE") {
+                echo '<option value="yellow">Yellow</option>
+                    <option value="red">Red</option>';
+            } else if ($region["alertLevel"] === "RED") {
+                echo '<option value="orange">Orange</option>';
+            }
+            ?>
         </select>
         <br />
+        <input type="hidden" name="regionId" value="<?= $region["regionId"]?>">
         <input type="submit" value="Create">
     </form>
 </body>
