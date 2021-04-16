@@ -11,9 +11,10 @@
 <body>
     <h1 class="title">Home</h1>
     <a href="/patient-followUp.php">Follow Up Form</a> <br /><br />
-    <a>View All Messages</a> <br /><br />
-    <a>Update Account</a> <br /><br />
+    <a href="/patient-message.php">View All Messages</a> <br /><br />
+    <a href="/patient-update-account.php">Update Account</a> <br /><br />
     <a href="/patient-associateChild.php">Associate Child</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/logout.php">Logout</a> <br /><br />
 </body>
 
 </html>
