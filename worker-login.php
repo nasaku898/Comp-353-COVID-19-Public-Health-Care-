@@ -50,11 +50,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-login.css">
-    <title>Patient Login</title>
+    <title>Worker Login</title>
 </head>
 
 <body>
-    <h1 class="title">Patient Login</h1>
+    <h1 class="title">Worker Login</h1>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="usernameDiv">
             <label for="medicareNumber">Medicare Number</label>
