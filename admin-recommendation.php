@@ -2,8 +2,14 @@
 require_once './db/db_connection.php';
 require './admin-HomeButton.php';
 
+$guideline = "GUIDELINE";
+
 $displayRecommendation = $conn->prepare('SELECT * FROM recommendation;');
 $displayRecommendation->execute();
+
+$messageGuidelineList = $conn->prepare('SELECT m.messageId FROM message m WHERE m.messageType = :guideline;');
+$messageGuidelineList->bindParam(':guideline', $guideline);
+$messageGuidelineList->execute();
 
 if(isset($_POST["recommendationCreate"]) && isset($_POST["create"]) ){
     $create = $conn->prepare("INSERT INTO recommendation(description) VALUES (:description);");
@@ -24,6 +30,12 @@ if(isset($_POST["editId"]) && isset($_POST["edit"]) && isset($_POST["recommendat
     $update->execute();
 }
 
+if(isset($_POST["selectedGuideline"]) && isset($_POST["linkGuideline"]) && isset($_POST["link"])){
+    $link = $conn->prepare('INSERT INTO ofType (recommendationId, messageId) VALUES (:recommendationId, :messageId);');
+    $link->bindParam(':recommendationId', $_POST["linkGuideline"]);
+    $link->bindParam(':messageId', $_POST["selectedGuideline"]);
+    $link->execute();
+}
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +67,17 @@ if(isset($_POST["editId"]) && isset($_POST["edit"]) && isset($_POST["recommendat
         <p>Enter Id</p>
         <input type="text" name="deleteId">
         <input type="submit" name="delete" value="Delete" id="button"></input>
+        </br>
+        <h3>Link Recommendation To Message Guidelines</h3>
+        <p>Select Guideline</p>
+        <select name="selectedGuideline">
+        <?php while ($row = $messageGuidelineList->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
+                <option value="<?= $row["messageId"] ?>"> <?= $row["messageId"] ?> </option>
+            <?php } ?>
+        </select>
+        <p>Enter Id</p>
+        <input type="text" name="linkGuideline">
+        <input type="submit" name="link" value="Link" id="button"></input>
     </form>
 
     <table id="admin-table">
