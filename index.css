@@ -1,4 +1,4 @@
-body{
+body {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -9,11 +9,24 @@ body{
     background-color: lightgray;
 }
 
-.button{
+.button {
     flex-direction: row;
 }
 
-.specificButton{
-    padding:5px;
-    margin:5px;
+.specificButton {
+    padding: 5px;
+    margin: 5px;
+    text-decoration: none !important;
 }
+
+a:link { text-decoration: none !important; }
+
+
+a:visited { text-decoration: none !important; }
+
+
+a:hover { text-decoration: none !important; }
+
+
+a:active { text-decoration: none !important; }
+

@@ -13,13 +13,13 @@
     <h1 class="title">Welcome</h1>
     <div class="button">
         <a href="https://aec353.encs.concordia.ca/patient-login.php">
-            <button type="button" class="specificButton">Patient</button>
+            <button class="specificButton">Patient</button>
         </a>
         <a href="https://aec353.encs.concordia.ca/worker-login.php">
-            <button type="button" class="specificButton">Worker</button>
+            <button  class="specificButton">Worker</button>
         </a>
         <a href="https://aec353.encs.concordia.ca/admin-login.php">
-            <button type="button" class="specificButton">Admin</button>
+            <button class="specificButton">Admin</button>
         </a>
     </div>
 </body>
