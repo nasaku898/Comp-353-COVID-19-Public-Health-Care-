@@ -12,14 +12,17 @@
 <body>
     <h1 class="title">Welcome Patient</h1>
     <div class="button">
-        <a href="/patient-register.php">
-            <button type="button" class="specificButton">
-                <a href="/patient-register.php">
-                    Create
-                </a>
-            </button>
+        <button type="button" class="specificButton">
+            <a href="/patient-register.php">
+                Create
+            </a>
+        </button>
 
-            <button type="button" class="specificButton">Login</button>
+        <button type="button" class="specificButton">
+            <a href="/patient-login.php">
+                Login
+            </a>
+        </button>
     </div>
 </body>
 

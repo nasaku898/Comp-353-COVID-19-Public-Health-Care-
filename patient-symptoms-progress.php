@@ -23,7 +23,6 @@ if (isset($_POST["startDate"]) && isset($_POST["endDate"]) && ($_POST["endDate"]
     $select->bindParam(':start', $_POST["startDate"]);
     $select->bindParam(':end', $_POST["endDate"]);
     $select->execute();
-
 } else {
     $select = $conn->prepare('SELECT fu.followUpId, fu.temperature, fu.otherSymptoms, fu.followUpDate
     FROM follow_up fu, diagnosticFollowUp dfu 
@@ -45,11 +44,17 @@ if (isset($_POST["startDate"]) && isset($_POST["endDate"]) && ($_POST["endDate"]
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-table.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
     <title>Admin Patient Date</title>
 </head>
 
 <body>
     <h1 class="title">My Symptoms by Date</h1>
+    <div class="homeButtonDiv">
+        <a href="https://aec353.encs.concordia.ca/patient-home.php">
+            <button type="button" id="homeButton">Home</button>
+        </a>
+    </div>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <label for="civic">Start Date</label>
         <input type="date" name="startDate" /> <br /><br />
@@ -58,7 +63,7 @@ if (isset($_POST["startDate"]) && isset($_POST["endDate"]) && ($_POST["endDate"]
         <input type="submit" value="Search" />
     </form>
 
-    <h3>MID : <?php echo $_SESSION["patientMedicareNumber"]?></h3>
+    <h3>MID : <?php echo $_SESSION["patientMedicareNumber"] ?></h3>
 
     <table id="admin-table">
         <thead>

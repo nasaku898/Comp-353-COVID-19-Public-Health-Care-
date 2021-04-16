@@ -40,16 +40,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $oldPostalCode = $_POST["old_postal_code"];
     $postalCode = $_POST["postal_code"];
 
-    if (empty(trim($firstName)) 
-        || empty(trim($lastName)) 
-        || empty(trim($telephoneNumber)) 
-        || empty(trim($citizenship)) 
-        || empty(trim($email)) 
+    if (
+        empty(trim($firstName))
+        || empty(trim($lastName))
+        || empty(trim($telephoneNumber))
+        || empty(trim($citizenship))
+        || empty(trim($email))
         || empty(trim($gender))
-        || empty(trim($civicNumber)) 
-        || empty(trim($streetName)) 
+        || empty(trim($civicNumber))
+        || empty(trim($streetName))
         || empty(trim($city))
-        || empty(trim($postalCode))) {
+        || empty(trim($postalCode))
+    ) {
         $error = "error";
         echo $error;
     } else {
@@ -61,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             emailAddress=:email
                                                             WHERE medicareNumber=:medicareNumber;");
         $updatePerson->bindParam(":medicareNumber", $medicareNumber);
-        $updatePerson->bindParam(":telephoneNumber", $telephoneNumber); 
+        $updatePerson->bindParam(":telephoneNumber", $telephoneNumber);
         $updatePerson->bindParam(":citizenship", $citizenship);
         $updatePerson->bindParam(":firstName", $firstName);
         $updatePerson->bindParam(":lastName", $lastName);
@@ -73,17 +75,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         civicNumber=:civicNumber, 
                                         city=:city
                                         WHERE streetName=:oldStreetName AND civicNumber=:oldCivicNumber AND city=:oldCity;");
-        $updateAddress->bindParam(":streetName", $streetName); 
+        $updateAddress->bindParam(":streetName", $streetName);
         $updateAddress->bindParam(":civicNumber", $civicNumber);
         $updateAddress->bindParam(":city", $city);
-        $updateAddress->bindParam(":oldStreetName", $oldStreetName); 
+        $updateAddress->bindParam(":oldStreetName", $oldStreetName);
         $updateAddress->bindParam(":oldCivicNumber", $oldCivicNumber);
         $updateAddress->bindParam(":oldCity", $oldCity);
 
         $updatePostalCode = $conn->prepare("UPDATE IGNORE postalArea SET
                                             postalCode = :postalCode
                                             WHERE postalCode = :oldPostalCode;");
-        $updatePostalCode->bindParam(":postalCode", $postalCode); 
+        $updatePostalCode->bindParam(":postalCode", $postalCode);
         $updatePostalCode->bindParam(":oldPostalCode", $oldPostalCode);
 
         if ($updatePerson->execute() && $updatePostalCode->execute() && $updateAddress->execute()) {
@@ -99,15 +101,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-edit-patient.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
+    <link rel="stylesheet" href="index.css">
     <title>Edit Patient</title>
 </head>
 
 <body>
     <h1> Edit Patient </h1>
+    <div class="homeButtonDiv">
+        <a href="https://aec353.encs.concordia.ca/patient-home.php">
+            <button type="button" id="homeButton">Home</button>
+        </a>
+    </div>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <label for="first_name"> First Name: </label>
         <input type="text" name="first_name" id="first_name" value="<?= $patient['firstName'] ?>">

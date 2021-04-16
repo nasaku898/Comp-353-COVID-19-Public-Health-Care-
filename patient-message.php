@@ -61,11 +61,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-table.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
     <title>Admin Message</title>
 </head>
 
 <body>
     <h1 class="title">Messages</h1>
+    <div class="homeButtonDiv">
+        <a href="https://aec353.encs.concordia.ca/patient-home.php">
+            <button type="button" id="homeButton">Home</button>
+        </a>
+    </div>
     <?php
     if (!empty($startDate_err)) {
         echo '<div class="alert">' . $startDate_err . '</div>';

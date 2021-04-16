@@ -116,12 +116,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-login.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
+    <link rel="stylesheet" href="index.css">
     <title>Patient FollowUp</title>
 </head>
 
 <body>
     <h1 class="title">Patient FollowUp</h1>
-
+    <div class="homeButtonDiv">
+        <a href="https://aec353.encs.concordia.ca/patient-home.php">
+            <button type="button" id="homeButton">Home</button>
+        </a>
+    </div>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <h3>Patient information</h3>
         <label>Diagnostic Id</label>

@@ -30,10 +30,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="patient-registration.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
+    <link rel="stylesheet" href="index.css">
     <title>Patient Associate Child</title>
 </head>
 
 <body>
+    <div class="homeButtonDiv">
+        <a href="https://aec353.encs.concordia.ca/patient-home.php">
+            <button type="button" id="homeButton">Home</button>
+        </a>
+    </div>
     <h1 class="title">Associate Child</h1>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <label for="parentMedicare">Parent Medicare</label>

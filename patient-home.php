@@ -1,3 +1,14 @@
+<?php
+
+session_start();
+if (!isset($_SESSION["patientLoggedIn"]) || $_SESSION["patientLoggedIn"] !== true) {
+    ob_start();
+    header("location: https://aec353.encs.concordia.ca/patient-login.php");
+    ob_end_flush();
+    die();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
