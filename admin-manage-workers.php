@@ -5,7 +5,7 @@ $statementPerson = $conn->prepare('SELECT DISTINCT p.medicareNumber, p.telephone
                                     FROM person p, address a, livesAt la, postalArea pa, inside i
                                     WHERE p.medicareNumber = la.medicareNumber AND a.city = la.city AND a.civicNumber = la.civicNumber AND a.streetName = la.streetName
                                     AND a.city = i.city AND a.civicNumber = i.civicNumber AND a.streetName = i.streetName AND pa.postalCode = i.postalCode
-                                    AND p.medicareNumber IN (SELECT phw.medicareNumber FROM publicHealthWorker phw);');
+                                    AND p.medicareNumber NOT IN (SELECT phw.medicareNumber FROM publicHealthWorker phw);');
 $statementPerson->execute();
 ?>
 
@@ -16,13 +16,13 @@ $statementPerson->execute();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-table.css">
-    <title>Manage Health Workers</title>
+    <title>Manage Patients</title>
 </head>
 
 <body>
-    <h1> Manage Health Workers </h1>
+    <h1> Manage Patients </h1>
     <br>
-    <button onClick="document.location.href='https://aec353.encs.concordia.ca/worker-registration.php'">Add New Worker</button>
+    <button onClick="document.location.href='https://aec353.encs.concordia.ca/patient-register.php'">Add New Patient</button>
     <br>
     <table id="admin-table">
         <thead>
