@@ -17,6 +17,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updateRegion->bindParam(":currentAlertLevel", $currentAlertLevel);
         $updateRegion->bindParam(":regionId", $_POST["regionId"]);
         if ($updateRegion->execute()) {
+            $createAlertMessage = $conn->prepare('INSERT INTO message (description, date, oldAlertState, newAlertState, messageType) VALUES (:description, NOW(), :oldAlertLevel, :newAlertLevel, "ALERT");');
+
+            $createGuidelineMessage = $conn->prepare('INSERT INTO message (description, date, oldAlertState, newAlertState, messageType) VALUES (:description, NOW(), :oldAlertLevel, :newAlertLevel, "GUIDELINE");');
+
+            $alertRiseMsg = "Alert state has been updated to a HIGHER strict level.";
+            $alertLowerMsg = "Alert state has been updated to a LESS strict level.";
+            switch ($_POST["oldAlertLevel"]) {
+                case "GREEN":
+                    $createAlertMessage->bindParam(":description", $alertRiseMsg);
+                    break;
+                case "YELLOW":
+                    if ($currentAlertLevel === "green") {
+                        $createAlertMessage->bindParam(":description", $alertLowerMsg);
+                    } else {
+                        $createAlertMessage->bindParam(":description", $alertRiseMsg);
+                    }
+                    break;
+                case "ORANGE":
+                    if ($currentAlertLevel === "yellow") {
+                        $createAlertMessage->bindParam(":description", $alertLowerMsg);
+                    } else {
+                        $redMsg = "Alert state has been updated to the HIGHEST level. Please be careful.";
+                        $createAlertMessage->bindParam(":description", $redMsg);
+                    }
+                    break;
+                case "RED":
+                    $createAlertMessage->bindParam(":description", $alertLowerMsg);
+                    break;
+            }
+
+            $createAlertMessage->bindParam(":oldAlertLevel", $_POST["oldAlertLevel"]);
+            $createAlertMessage->bindParam(":newAlertLevel", $currentAlertLevel);
+            $createAlertMessage->execute();
+
+            $insertedAlertMessageId = $conn->lastInsertId();
+
+            $guidelineMsg = "With the alert level changed, please follow the following recommendations.";
+            $createGuidelineMessage->bindParam(":description", $guidelineMsg);
+            $createGuidelineMessage->bindParam(":oldAlertLevel", $_POST["oldAlertLevel"]);
+            $createGuidelineMessage->bindParam(":newAlertLevel", $currentAlertLevel);
+            $createGuidelineMessage->execute();
+
+            $insertedGuidelineMessage = $conn->lastInsertId();
+
+            $fetchAllRecommendation = $conn->prepare('SELECT * FROM recommendation');
+            $fetchAllRecommendation->execute();
+
+            while ($recommendation = $fetchAllRecommendation->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) {
+                $createOfType = $conn->prepare('INSERT INTO ofType(recommendationId,messageId) VALUES(:recommendationId, :messageId)');
+
+                $createOfType->bindParam(":recommendationId", $recommendation["recommendationId"]);
+                $createOfType->bindParam(":messageId", $insertedGuidelineMessage);
+                $createOfType->execute();
+            }
+
+            $findPerson = $conn->prepare('SELECT p.medicareNumber
+            FROM person p, livesAt la, address a, situatedIn si, region r
+            WHERE p.medicareNumber = la.medicareNumber 
+            AND la.civicNumber = a.civicNumber AND la.streetName = a.streetName AND la.city = a.city
+            AND a.civicNumber = si.civicNumber AND a.streetName = si.streetName AND a.city = si.city
+            AND si.regionId = r.regionId
+            AND r.name = :regionName;');
+            $findPerson->bindParam(":regionName", $regionName);
+            $findPerson->execute();
+
+            while ($person = $findPerson->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) {
+                $personMedicareNumber = $person["medicareNumber"];
+                $createNotifiesAlertMessage = $conn->prepare("INSERT INTO notifies(messageId, regionId, medicareNumber) VALUES(:messageId, :regionId, :medicareNumber)");
+                $createNotifiesAlertMessage->bindParam(":messageId", $insertedAlertMessageId);
+                $createNotifiesAlertMessage->bindParam(":regionId", $_POST["regionId"]);
+                $createNotifiesAlertMessage->bindParam(":medicareNumber", $personMedicareNumber);
+                $createNotifiesAlertMessage->execute();
+
+                $createNotifiesGuidelineMessage = $conn->prepare("INSERT INTO notifies(messageId, regionId, medicareNumber) VALUES(:messageId, :regionId, :medicareNumber)");
+                $createNotifiesGuidelineMessage->bindParam(":messageId", $insertedGuidelineMessage);
+                $createNotifiesGuidelineMessage->bindParam(":regionId", $_POST["regionId"]);
+                $createNotifiesGuidelineMessage->bindParam(":medicareNumber", $personMedicareNumber);
+                $createNotifiesGuidelineMessage->execute();
+            }
+
             unset($_POST);
             ob_start();
             //Redirect to manage region when completed
@@ -52,8 +132,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="regionName">Region Name</label>
         <input type="text" id="regionName" name="regionName" value="<?= $region["name"] ?>">
         <br />
-        <label for="currentAlertLevel">Current Alert Level</label>
-        <select name="currentAlertLevel" id="currentAlertLevel" value="<?= $region["alertLevel"] ?>">
+        <p>Current Alert Level: <?= $region["alertLevel"] ?></p>
+        <label for="currentAlertLevel">New Alert Level</label>
+        <select name="currentAlertLevel" id="currentAlertLevel" ?>">
             <?php
             if ($region["alertLevel"] === "GREEN") {
                 echo '<option value="yellow">Yellow</option>';
@@ -68,9 +149,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             ?>
         </select>
+        <input type="hidden" name="oldAlertLevel" value="<?= $region["alertLevel"] ?>">
         <br />
-        <input type="hidden" name="regionId" value="<?= $region["regionId"]?>">
-        <input type="submit" value="Create">
+        <input type="hidden" name="regionId" value="<?= $region["regionId"] ?>">
+        <input type="submit" value="Update">
+        <input type="button" onClick="document.location.href='https://aec353.encs.concordia.ca/admin-manage-region.php'" value="Cancel" />
     </form>
 </body>
 

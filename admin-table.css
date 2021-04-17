@@ -1,9 +1,9 @@
-body{
+body {
     background-color: lightgray;
 }
 
-.alert{
-    color:red;
+.alert {
+    color: red;
     margin-bottom: 10px;
 }
 
@@ -19,7 +19,7 @@ body{
     padding: 8px;
 }
 
-#admin-table tr:nth-child(even){
+#admin-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
@@ -34,3 +34,11 @@ body{
     background-color: #4CAF50;
     color: white;
 }
+
+a:link { text-decoration: none !important; }
+
+a:visited { text-decoration: none !important; }
+
+a:hover { text-decoration: none !important; }
+
+a:active { text-decoration: none !important; }

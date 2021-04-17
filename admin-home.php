@@ -25,7 +25,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     <a href="https://aec353.encs.concordia.ca/admin-manage-patients.php">Manage Patients</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-manage-workers.php">Manage Workers</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-manage-facilities.php">Manage Facilities</a> <br /><br />
-    <a>Manage Region</a> <br /><br />
+    <a href="https://aec353.encs.concordia.ca/admin-manage-region.php">Manage Region</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-group-zone.php">Manage Group Zone</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-recommendation.php">Manage Health Recommendation</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/admin-message.php">Display All Messages</a> <br /><br />
