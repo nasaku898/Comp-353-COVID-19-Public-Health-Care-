@@ -4,6 +4,8 @@ require_once './db/db_connection.php';
 // Initialize the session
 session_start();
 
+$startDate = $endDate = "";
+
 if ((!isset($_SESSION["patientLoggedIn"]) || $_SESSION["patientLoggedIn"] !== true)) {
     ob_start();
     header("location:https://aec353.encs.concordia.ca/patient-login.php");
@@ -12,25 +14,31 @@ if ((!isset($_SESSION["patientLoggedIn"]) || $_SESSION["patientLoggedIn"] !== tr
 }
 
 if (isset($_POST["startDate"]) && isset($_POST["endDate"]) && ($_POST["endDate"] > $_POST["startDate"])) {
-    $select = $conn->prepare('SELECT fu.followUpId, fu.temperature, fu.otherSymptoms, fu.followUpDate
-    FROM follow_up fu, diagnosticFollowUp dfu 
+    $startDate = $_POST["startDate"] . " 00:00:00";
+    $endDate = $_POST["endDate"] . " 23:59:59";
+    $select = $conn->prepare("SELECT fu.followUpId, fu.temperature, fu.otherSymptoms, fu.followUpDate, group_concat(concat(' ', s.name)) as symptoms
+    FROM follow_up fu, diagnosticFollowUp dfu, symptomsStatus ss, symptoms s
     WHERE dfu.diagnosticId IN (
     SELECT d.diagnosticId
     FROM diagnostic d, receive r, person p
-    WHERE p.medicareNumber = :mid and r.medicareNumber = p.medicareNumber and r.diagnosticId = d.diagnosticId)
-    and dfu.followUpId = fu.followUpId and followUpDate > :start and followUpDate < :end;');
+    WHERE p.medicareNumber =:mid and r.medicareNumber = p.medicareNumber and r.diagnosticId = d.diagnosticId)
+    and dfu.followUpId = fu.followUpId and followUpDate >=:start and followUpDate <=:end
+    AND fu.followUpId = ss.followUpId AND ss.name = s.name
+    GROUP BY fu.followUpId, fu.temperature, fu.otherSymptoms, fu.followUpDate;");
     $select->bindParam(':mid', $_SESSION["patientMedicareNumber"]);
-    $select->bindParam(':start', $_POST["startDate"]);
-    $select->bindParam(':end', $_POST["endDate"]);
+    $select->bindParam(':start', $startDate);
+    $select->bindParam(':end', $endDate);
     $select->execute();
 } else {
-    $select = $conn->prepare('SELECT fu.followUpId, fu.temperature, fu.otherSymptoms, fu.followUpDate
-    FROM follow_up fu, diagnosticFollowUp dfu 
+    $select = $conn->prepare("SELECT fu.followUpId, fu.temperature, fu.otherSymptoms, fu.followUpDate, group_concat(concat(' ', s.name)) as symptoms
+    FROM follow_up fu, diagnosticFollowUp dfu, symptomsStatus ss, symptoms s
     WHERE dfu.diagnosticId IN (
     SELECT d.diagnosticId
     FROM diagnostic d, receive r, person p
-    WHERE p.medicareNumber = :mid and r.medicareNumber = p.medicareNumber and r.diagnosticId = d.diagnosticId)
-    and dfu.followUpId = fu.followUpId;');
+    WHERE p.medicareNumber =:mid and r.medicareNumber = p.medicareNumber and r.diagnosticId = d.diagnosticId)
+    and dfu.followUpId = fu.followUpId
+    AND fu.followUpId = ss.followUpId AND ss.name = s.name
+    GROUP BY fu.followUpId, fu.temperature, fu.otherSymptoms, fu.followUpDate;");
     $select->bindParam(':mid', $_SESSION["patientMedicareNumber"]);
     $select->execute();
 }
@@ -78,6 +86,9 @@ if (isset($_POST["startDate"]) && isset($_POST["endDate"]) && ($_POST["endDate"]
                     Date
                 </th>
                 <th>
+                    Symptoms
+                </th>
+                <th>
                     Other Symptoms
                 </th>
             </tr>
@@ -95,6 +106,9 @@ if (isset($_POST["startDate"]) && isset($_POST["endDate"]) && ($_POST["endDate"]
                     </td>
                     <td>
                         <?= $row["followUpDate"] ?>
+                    </td>
+                    <td>
+                        <?= $row["symptoms"] ?>
                     </td>
                     <td>
                         <?= $row["otherSymptoms"] ?>
