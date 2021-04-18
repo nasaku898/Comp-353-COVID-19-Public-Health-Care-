@@ -27,9 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!empty($startDate_err) || !empty($endDate_err)) {
-        $statement = $conn->prepare("SELECT r.name, m.date, m.description, m.oldAlertState, m.newAlertState
+        $statement = $conn->prepare("SELECT DISTINCT r.name, m.date, m.description, m.oldAlertState, m.newAlertState
         FROM region r, notifies n, message m
-        WHERE r.regionId = n.regionId AND n.messageId = m.messageId AND m.messageType = 'Alert'");
+        WHERE r.regionId = n.regionId AND n.messageId = m.messageId AND m.messageType = 'Alert' ORDER BY m.date desc");
         $statement->execute();
 
         $cases = $conn->prepare("SELECT result.name, group_concat(result.results, CONCAT(':', result.numberOfCase)) as cases
@@ -56,9 +56,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if start date greater than end date
         if ($startDate > $endDate) {
             $endDate_err = "Invalid date. 'From' date greater than 'To' date.";
-            $statement = $conn->prepare("SELECT r.name, m.date, m.description, m.oldAlertState, m.newAlertState
+            $statement = $conn->prepare("SELECT DISTINCT r.name, m.date, m.description, m.oldAlertState, m.newAlertState
             FROM region r, notifies n, message m
-            WHERE r.regionId = n.regionId AND n.messageId = m.messageId AND m.messageType = 'Alert'");
+            WHERE r.regionId = n.regionId AND n.messageId = m.messageId AND m.messageType = 'Alert' ORDER BY m.date desc");
             $statement->execute();
 
             $cases = $conn->prepare("SELECT result.name, group_concat(result.results, CONCAT(':', result.numberOfCase)) as cases
@@ -79,9 +79,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             GROUP BY result.name;");
             $cases->execute();
         } else {
-            $statement = $conn->prepare("SELECT r.name, m.date, m.description, m.oldAlertState, m.newAlertState
+            $statement = $conn->prepare("SELECT DISTINCT r.name, m.date, m.description, m.oldAlertState, m.newAlertState
             FROM region r, notifies n, message m
-            WHERE r.regionId = n.regionId AND n.messageId = m.messageId AND m.messageType = 'Alert' AND m.date >=:startDate AND m.date <=:endDate");
+            WHERE r.regionId = n.regionId AND n.messageId = m.messageId AND m.messageType = 'Alert' AND m.date >=:startDate AND m.date <=:endDate ORDER BY m.date desc");
             $statement->bindParam(":startDate", $startDate);
             $statement->bindParam(":endDate", $endDate);
             $statement->execute();
@@ -108,9 +108,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 } else {
-    $statement = $conn->prepare("SELECT r.name, m.date, m.description, m.oldAlertState, m.newAlertState
+    $statement = $conn->prepare("SELECT DISTINCT r.name, m.date, m.description, m.oldAlertState, m.newAlertState
     FROM region r, notifies n, message m
-    WHERE r.regionId = n.regionId AND n.messageId = m.messageId AND m.messageType = 'Alert'");
+    WHERE r.regionId = n.regionId AND n.messageId = m.messageId AND m.messageType = 'Alert' ORDER BY m.date desc");
     $statement->execute();
 
     $cases = $conn->prepare("SELECT result.name, group_concat(result.results, CONCAT(':', result.numberOfCase)) as cases
