@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <h1 class="title">Group Zone</h1>
         <div class="homeButtonDiv">
-            <a href="https://aec353.encs.concordia.ca/admin-home.php">
+            <a href="https://aec353.encs.concordia.ca/worker-home.php">
                 <button type="button" id="homeButton">Home</button>
             </a>
         </div>

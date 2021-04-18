@@ -101,13 +101,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" name="delete" value="Delete" id="button"></input>
         </br>
         <h3>Link Recommendation To Message Guidelines</h3>
-        <p>Select Guideline</p>
+        <p>Select Message Id</p>
         <select name="selectedGuideline">
             <?php while ($row = $messageGuidelineList->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) { ?>
                 <option value="<?= $row["messageId"] ?>"> <?= $row["messageId"] ?> </option>
             <?php } ?>
         </select>
-        <p>Enter Id</p>
+        <p>Enter Recommendation Id</p>
         <input type="text" name="linkGuideline">
         <input type="submit" name="link" value="Link" id="button"></input>
     </form>
