@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["center_name"])) {
     $centerNameErr = "* Facility name is required.";
   } else {
-    $centerName = format_input($_POST["center_name"]);
+    $centerName = $_POST["center_name"];
     // check if name only contains letters and whitespace
     if (!preg_match("/^[A-Za-z0-9 ]*[A-Za-z0-9][A-Za-z0-9 ]*$/",$centerName)) {
       $centerNameErr = " * Only letters, numbers and white spaces allowed";
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["website"])) {
     $websiteErr = "* Website URL is required.";
   } else {
-    $website = format_input($_POST["website"]);
+    $website = $_POST["website"];
     // check if URL address syntax is valid (this regular expression also allows dashes in the URL)
     if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
       $websiteErr = " * Invalid URL";
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["phone_number"])) {
     $phoneNumberErr = "* Phone number is required.";
   } else {
-    $phoneNumber = format_input($_POST["phone_number"]);
+    $phoneNumber = $_POST["phone_number"];
     // check if e-mail address is well-formed
     if (!preg_match("/^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/", $phoneNumber)) {
       $phoneNumberErr = " * Invalid phone number format";
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["installment_type"])) {
     $installmentTypeErr = "* Installment type is required.";
   } else {
-    $installmentType = format_input($_POST["installment_type"]);
+    $installmentType = $_POST["installment_type"];
     // check if name only contains letters and whitespace
     if (!preg_match("/^[a-zA-Z-' ]*$/",$installmentType)) {
       $installmentTypeErr = " * Only letters and white spaces allowed.";
@@ -51,13 +51,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["appointment_method"])) {
     $appointmentMethodErr = " * Appointment method is required";
   } else {
-    $appointmentMethod = format_input($_POST["appointment_method"]);
+    $appointmentMethod = $_POST["appointment_method"];
   }
 
   if (empty($_POST["civic_number"])) {
     $civicNumberErr = "* Civic number is required.";
   } else {
-    $civicNumber = format_input($_POST["civic_number"]);
+    $civicNumber = $_POST["civic_number"];
     if (!preg_match("/^[0-9.-]*$/", $civicNumber)) {
       $civicNumberErr = " * Only numbers, dashes and dots are allowed.";
     }
@@ -66,37 +66,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["street_name"])) {
     $streetNameErr = " * Street name is required";
   } else {
-    $streetName = format_input($_POST["street_name"]);
+    $streetName = $_POST["street_name"];
   }
 
   if (empty($_POST["city"])) {
     $cityErr = " * City is required";
   } else {
-    $city = format_input($_POST["city"]);
+    $city = $_POST["city"];
   }
 
   if (empty($_POST["postal_code"])) {
     $postalCodeErr = " * Postal code is required";
   } else {
-    $postalCode = format_input($_POST["postal_code"]);
+    $postalCode = $_POST["postal_code"];
   }
 
   if (empty($_POST["province"])) {
     $provinceErr = " * Province is required";
   } else {
-    $province = format_input($_POST["province"]);
+    $province = ($_POST["province"]);
   }
 
   $region = $_POST["region"];
+  $driveThru = $_POST["drive_thru"];
 }
 
-function format_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  return $data;
-}
-
-if (isset($_POST["center_name"]) && !empty($_POST["center_name"]) && isset($_POST["website"]) && !empty($_POST["website"]) && isset($_POST["phone_number"]) && !empty($_POST["phone_number"]) && isset($_POST["installment_type"]) && !empty($_POST["installment_type"]) && isset($_POST["drive_thru"]) && !empty($_POST["drive_thru"])) {
+if (isset($_POST["center_name"]) && !empty($_POST["center_name"]) && isset($_POST["website"]) && !empty($_POST["website"]) && isset($_POST["phone_number"]) && !empty($_POST["phone_number"]) && isset($_POST["installment_type"]) && !empty($_POST["installment_type"])) {
   $statementFacility = $conn->prepare("INSERT IGNORE INTO publicHealthCenter(installmentType, appointmentMethod, phoneNumber, website, centerName, hasDriveThru)
                               VALUES (:installmentType, :appointmentMethod, :phoneNumber, :website, :centerName, :driveThrough);");
   $statementFacility->bindParam(":installmentType", $installmentType);
@@ -104,7 +99,7 @@ if (isset($_POST["center_name"]) && !empty($_POST["center_name"]) && isset($_POS
   $statementFacility->bindParam(":phoneNumber", $phoneNumber);
   $statementFacility->bindParam(":website", $website);
   $statementFacility->bindParam(":centerName", $centerName);
-  $statementFacility->bindParam(":driveThrough", $_POST["drive_thru"]);
+  $statementFacility->bindParam(":driveThrough", $driveThru);
 
   $statementAddress = $conn->prepare("INSERT IGNORE INTO address(city, streetName, civicNumber)
                             VALUES (:city, :streetName, :civicNumber);");
