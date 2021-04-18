@@ -1,15 +1,15 @@
 <?php
 require_once 'db/db_connection.php';
+session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $parentMedicare = $_POST["parentMedicare"];
     $childMedicare = $_POST["childMedicare"];
 
-    if (empty(trim($parentMedicare)) || empty(trim($childMedicare))) {
+    if (empty(trim($childMedicare))) {
         $error = "error";
         echo $error;
     } else {
         $createParentOf = $conn->prepare("INSERT INTO parentOf(parentId, childId) VALUES(:parentMedicare,:childMedicare)");
-        $createParentOf->bindParam(":parentMedicare", $parentMedicare);
+        $createParentOf->bindParam(":parentMedicare", $_SESSION["patientMedicareNumber"]);
         $createParentOf->bindParam(":childMedicare", $childMedicare);
 
         if ($createParentOf->execute()) {
@@ -43,9 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <h1 class="title">Associate Child</h1>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <label for="parentMedicare">Parent Medicare</label>
-        <input type="text" id="parentMedicare" name="parentMedicare">
-        <br />
         <label for="childMedicare">Child Medicare</label>
         <input type="text" id="childMedicare" name="childMedicare">
         <br />

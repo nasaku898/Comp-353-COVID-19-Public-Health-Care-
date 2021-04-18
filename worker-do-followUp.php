@@ -125,13 +125,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="admin-login.css">
     <link rel="stylesheet" href="admin-HomeButton.css">
     <link rel="stylesheet" href="index.css">
-    <title>Patient FollowUp</title>
+    <title>Worker Enter Patient FollowUp</title>
 </head>
 
 <body>
-    <h1 class="title">Patient FollowUp</h1>
+    <h1 class="title">Worker Enter Patient FollowUp</h1>
     <div class="homeButtonDiv">
-        <a href="https://aec353.encs.concordia.ca/patient-home.php">
+        <a href="https://aec353.encs.concordia.ca/worker-home.php">
             <button type="button" id="homeButton">Home</button>
         </a>
     </div>

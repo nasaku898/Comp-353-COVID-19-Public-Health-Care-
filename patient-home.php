@@ -26,7 +26,6 @@ if (!isset($_SESSION["patientLoggedIn"]) || $_SESSION["patientLoggedIn"] !== tru
     <a href="/patient-update-account.php">Update Account</a> <br /><br />
     <a href="/patient-associateChild.php">Associate Child</a> <br /><br />
     <a href="/patient-symptoms-progress.php">View Symptoms Progress</a> <br /><br />
-    <a href="/patient-associateChild.php">Associate Child</a> <br /><br />
     <a href="https://aec353.encs.concordia.ca/logout.php">Logout</a>
 </body>
 

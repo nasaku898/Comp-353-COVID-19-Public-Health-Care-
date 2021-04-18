@@ -1,6 +1,5 @@
 <?php
 require_once './db/db_connection.php';
-require 'admin-HomeButton.php';
 
 // Initialize the session
 session_start();
@@ -114,11 +113,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin-message.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
     <title>Patient Message</title>
 </head>
 
 <body>
     <h1 class="title">Messages</h1>
+    <div class="homeButtonDiv">
+        <a href="https://aec353.encs.concordia.ca/patient-home.php">
+            <button type="button" id="homeButton">Home</button>
+        </a>
+    </div>
     <?php
     if (!empty($startDate_err)) {
         echo '<div class="alert">' . $startDate_err . '</div>';
