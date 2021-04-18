@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($createLivesAt->execute() && $createSituatedIn->execute() && $createInside->execute() && $createHealthWorker->execute() && $createWorksAt->execute()) {
                 unset($_POST);
                 ob_start();
-                header("location: https://aec353.encs.concordia.ca/admin-home.php");
+                header("location: https://aec353.encs.concordia.ca/worker-index.php");
                 ob_end_flush();
                 die();
             }
