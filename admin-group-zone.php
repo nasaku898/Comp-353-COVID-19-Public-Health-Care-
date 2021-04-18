@@ -9,24 +9,36 @@ if ((!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)) {
 }
 
 require_once 'db/db_connection.php';
-require 'admin-HomeButton.php';
 
 $select = $conn->prepare('SELECT name FROM groupZone;');
 $select->execute();
 
-    if(isset($_POST["groupZoneCreate"]) && isset($_POST["create"]) ){
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["groupZoneCreate"]) && isset($_POST["create"])) {
         $workHistory = $conn->prepare("INSERT INTO groupZone(name) VALUES (:name);");
         $workHistory->bindParam(':name', $_POST["groupZoneCreate"]);
-        $workHistory->execute();
+        if ($workHistory->execute()) {
+            unset($_POST);
+            ob_start();
+            header("location: https://aec353.encs.concordia.ca/admin-group-zone.php");
+            ob_end_flush();
+            die();
+        };
     }
 
-    if(isset($_POST["zoneSelected"]) && isset($_POST["delete"]) ){
+    if (isset($_POST["zoneSelected"]) && isset($_POST["delete"])) {
         $delete = $conn->prepare("DELETE FROM groupZone WHERE (name = :zoneToDelete);");
         $delete->bindParam(':zoneToDelete', $_POST["zoneSelected"]);
-        $delete->execute();
+        if ($delete->execute()) {
+            unset($_POST);
+            ob_start();
+            header("location: https://aec353.encs.concordia.ca/admin-group-zone.php");
+            ob_end_flush();
+            die();
+        }
     }
 
-    if(isset($_POST["zoneSelected"]) && isset($_POST["patientMedicareNumber"]) && isset($_POST["add"]) ){
+    if (isset($_POST["zoneSelected"]) && isset($_POST["patientMedicareNumber"]) && isset($_POST["add"])) {
         $insertId = $conn->prepare("SELECT groupId FROM groupZone WHERE (name = :zoneToAdd);");
         $insertId->bindParam(':zoneToAdd', $_POST["zoneSelected"]);
         $insertId->execute();
@@ -40,9 +52,14 @@ $select->execute();
         $add->bindParam(':medicareNumber', $_POST["patientMedicareNumber"]);
         $add->bindParam(':groupId', $insert);
         $add->execute();
+        unset($_POST);
+        ob_start();
+        header("location: https://aec353.encs.concordia.ca/admin-group-zone.php");
+        ob_end_flush();
+        die();
     }
 
-    if(isset($_POST["zoneSelected"]) && isset($_POST["newNameZone"]) && isset($_POST["update"]) ){
+    if (isset($_POST["zoneSelected"]) && isset($_POST["newNameZone"]) && isset($_POST["update"])) {
         $editId = $conn->prepare("SELECT groupId FROM groupZone WHERE (name = :zoneToEdit);");
         $editId->bindParam(':zoneToEdit', $_POST["zoneSelected"]);
         $editId->execute();
@@ -54,8 +71,13 @@ $select->execute();
         $update->bindParam(':newNameZone', $_POST["newNameZone"]);
         $update->bindParam(':id', $edit);
         $update->execute();
+        unset($_POST);
+        ob_start();
+        header("location: https://aec353.encs.concordia.ca/admin-group-zone.php");
+        ob_end_flush();
+        die();
     }
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -65,12 +87,18 @@ $select->execute();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="group-zone.css">
+    <link rel="stylesheet" href="admin-HomeButton.css">
     <title>Group Zone</title>
 </head>
 
 <body>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <h1 class="title">Group Zone</h1>
+        <div class="homeButtonDiv">
+            <a href="https://aec353.encs.concordia.ca/admin-home.php">
+                <button type="button" id="homeButton">Home</button>
+            </a>
+        </div>
         <p>Create Group Zone</p>
         <div id="form">
             <p>Name</p>

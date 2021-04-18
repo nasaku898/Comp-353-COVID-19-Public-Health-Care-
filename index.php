@@ -12,10 +12,10 @@
 <body>
     <h1 class="title">Welcome</h1>
     <div class="button">
-        <a href="https://aec353.encs.concordia.ca/patient-login.php">
+        <a href="https://aec353.encs.concordia.ca/patient-index.php">
             <button class="specificButton">Patient</button>
         </a>
-        <a href="https://aec353.encs.concordia.ca/worker-login.php">
+        <a href="https://aec353.encs.concordia.ca/worker-index.php">
             <button  class="specificButton">Worker</button>
         </a>
         <a href="https://aec353.encs.concordia.ca/admin-login.php">

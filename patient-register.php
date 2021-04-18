@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($createLivesAt->execute() && $createSituatedIn->execute() && $createInside->execute()) {
                 unset($_POST);
                 ob_start();
-                header("location: https://aec353.encs.concordia.ca/patient-home.php");
+                header("location: https://aec353.encs.concordia.ca/patient-index.php");
                 ob_end_flush();
                 die();
             }
