@@ -1,1 +1,0 @@
-INSERT INTO groupZone(name) VALUES (:name);
