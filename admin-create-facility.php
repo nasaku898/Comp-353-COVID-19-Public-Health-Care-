@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $civicNumberErr = "* Civic number is required.";
   } else {
     $civicNumber = format_input($_POST["civic_number"]);
-    if (!preg_match("/^[0-9.-]*$/", $phoneNumber)) {
+    if (!preg_match("/^[0-9.-]*$/", $civicNumber)) {
       $civicNumberErr = " * Only numbers, dashes and dots are allowed.";
     }
   }
